@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import AppBody from './components/layouts/AppBody.vue';
+import AppHeader from './components/layouts/AppHeader.vue';
 </script>
 
 <template>
-  <HelloWorld />
+  <AppHeader />
+  <AppBody />
+
 </template>
