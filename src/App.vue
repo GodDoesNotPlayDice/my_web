@@ -6,5 +6,4 @@ import AppHeader from './components/layouts/AppHeader.vue';
 <template>
   <AppHeader />
   <AppBody />
-
 </template>
