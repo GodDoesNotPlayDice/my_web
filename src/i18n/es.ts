@@ -131,7 +131,7 @@ export const es = {
       },
       {
         period: '2026',
-        title: 'App de Aprendizaje de Idiomas',
+        title: 'Yozh — App de Aprendizaje de Idiomas',
         company: '',
         description: 'Desarrollo de una aplicación web y móvil innovadora diseñada para facilitar el aprendizaje de idiomas de forma interactiva. Un proyecto personal que combina mis habilidades técnicas con mi pasión por la educación y la tecnología.',
       }
@@ -158,7 +158,7 @@ export const es = {
         description: 'Scraper de retail escalable construido con Arquitectura Limpia y DDD, capaz de procesar grandes volúmenes de datos de productos de forma robusta y mantenible.',
       },
       {
-        title: 'Language Learning App',
+        title: 'Yozh — Language Learning App',
         description: 'Aplicación web y móvil en desarrollo para el aprendizaje de idiomas de forma interactiva. Combina gamificación, práctica de escritura, escucha y vocabulario contextual.',
       }
     ]
@@ -168,6 +168,8 @@ export const es = {
     subtitle:
       "Títulos y certificaciones que respaldan mi formación técnica y mi compromiso con el aprendizaje continuo.",
     viewFull: "Ver certificado completo",
+    showMore: "Ver más",
+    showLess: "Ver menos",
     issuer: "Emisor",
     date: "Fecha",
     noImage: "Imagen próximamente",
@@ -232,12 +234,21 @@ export const es = {
     form: {
       title: "Envíame un mensaje",
       name: "Nombre",
-      namePlaceholder: "Tu nombre",
+      namePlaceholder: "tu nombre",
       email: "Email",
-      emailPlaceholder: "tu@email.com",
+      emailPlaceholder: "email",
       message: "Mensaje",
-      messagePlaceholder: "Cuéntame sobre tu proyecto o idea...",
+      messagePlaceholder: "cuéntame sobre tu proyecto o idea...",
       send: "Enviar Mensaje",
+      sending: "Enviando...",
+      success: "¡Mensaje enviado con éxito!",
+      error: "Error al enviar el mensaje.",
+      errors: {
+        nameRequired: "El nombre es requerido",
+        emailRequired: "El correo es requerido",
+        emailInvalid: "Correo inválido",
+        messageRequired: "El mensaje es requerido",
+      }
     },
     links: {
       email: "Correo Electrónico",

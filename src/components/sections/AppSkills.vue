@@ -17,19 +17,19 @@ const categories = computed<SkillCategory[]>(() => [
     key: 'frontend',
     icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>`,
     color: 'teal',
-    skills: ['TypeScript', 'Vue.js', 'Nuxt', 'HTML5', 'CSS3', `React ${t('skills.learning')}`, `Angular ${t('skills.learning')}`],
+    skills: ['TypeScript', 'Vue.js', 'Tailwind'],
   },
   {
     key: 'backend',
     icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>`,
     color: 'indigo',
-    skills: ['Python', 'FastAPI', 'Django (BFF)', 'JavaScript', 'REST APIs'],
+    skills: ['Python', 'FastAPI', 'Django (BFF)', 'JavaScript', 'REST APIs', 'Nuxt'],
   },
   {
     key: 'databases',
     icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>`,
     color: 'orange',
-    skills: ['PostgreSQL', 'Supabase', 'MongoDB', 'MySQL'],
+    skills: ['Supabase', 'MongoDB', 'MySQL'],
   },
   {
     key: 'devops',

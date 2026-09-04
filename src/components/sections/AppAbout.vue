@@ -51,9 +51,7 @@ const { t } = useI18n()
             </div>
           </div>
 
-          <button class="w-full bg-[#20b2aa] hover:bg-teal-500 text-white py-3 md:py-3.5 rounded text-sm font-medium transition-colors flex justify-center items-center gap-2">
-            {{ t('about.button') }} <span>→</span>
-          </button>
+
         </div>
       </div>
     </div>

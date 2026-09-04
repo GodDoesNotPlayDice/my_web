@@ -8,8 +8,7 @@ const { t, tm } = useI18n()
 const academicCertifications = computed(() => tm('education.formal.certsList') as string[])
 
 const selfTaughtTech = [
-  'Vue.js', 'Nuxt', 'Python', 'Supabase',
-  'FastAPI', 'Playwright', 'TypeScript', 'PostgreSQL',
+  'Frontend', 'Backend', 'IA', 'Cloud'
 ]
 </script>
 

@@ -150,16 +150,7 @@ const accentMap = {
                 {{ item.description }}
               </p>
 
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="tag in item.tags"
-                  :key="tag"
-                  class="text-xs px-2.5 py-1 rounded-md border font-medium"
-                  :class="accentMap[item.accent].tag"
-                >
-                  {{ tag }}
-                </span>
-              </div>
+
             </div>
           </div>
         </div>

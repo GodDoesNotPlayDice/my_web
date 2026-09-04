@@ -1,10 +1,16 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { gsap } from "gsap";
+import { TextPlugin } from "gsap/TextPlugin";
+
+gsap.registerPlugin(TextPlugin);
+
 const { t } = useI18n();
 
 const isDark = ref(false);
 const isMobile = ref(false);
+const nameElement = ref(null);
 
 onMounted(() => {
   isDark.value = document.documentElement.classList.contains("dark");
@@ -14,7 +20,32 @@ onMounted(() => {
     isDark.value = document.documentElement.classList.contains("dark");
   });
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+  // GSAP Typewriter animation
+  gsap.fromTo(
+    nameElement.value,
+    { text: "" },
+    {
+      duration: 1.5,
+      text: t("hero.name"),
+      ease: "none",
+      delay: 0.3,
+    }
+  );
 });
+
+watch(() => t("hero.name"), (newName) => {
+  gsap.fromTo(
+    nameElement.value,
+    { text: "" },
+    {
+      duration: 1.5,
+      text: newName,
+      ease: "none",
+    }
+  );
+});
+
 
 // Particles tuned for mobile visibility
 const particlesOptions = computed(() => {
@@ -23,13 +54,13 @@ const particlesOptions = computed(() => {
     fullScreen: { enable: false },
     background: { color: { value: "transparent" } },
     particles: {
-      color: { value: isDark.value ? "#ffffff" : "#1e293b" },
+      color: { value: isDark.value ? "#ffffff" : "#0f172a" },
       links: {
         enable: true,
-        color: isDark.value ? "#94a3b8" : "#475569",
+        color: isDark.value ? "#94a3b8" : "#334155",
         distance: mobile ? 100 : 150,
-        opacity: mobile ? 0.5 : 0.35,
-        width: mobile ? 1 : 1.5,
+        opacity: isDark.value ? (mobile ? 0.5 : 0.35) : (mobile ? 0.8 : 0.65),
+        width: isDark.value ? (mobile ? 1 : 1.5) : (mobile ? 1.5 : 2),
       },
       move: {
         enable: true,
@@ -43,7 +74,7 @@ const particlesOptions = computed(() => {
         value: mobile ? 80 : 100,
         density: { enable: true, area: mobile ? 400 : 800 },
       },
-      opacity: { value: mobile ? 0.55 : 0.3 },
+      opacity: { value: isDark.value ? (mobile ? 0.55 : 0.3) : (mobile ? 0.8 : 0.6) },
       size: { value: { min: mobile ? 2 : 1, max: mobile ? 3.5 : 2 } },
     },
     interactivity: {
@@ -75,13 +106,9 @@ function scrollToProjects() {
         {{ t("hero.subtitle") }}
       </h3>
 
-      <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight leading-tight">
-        <span class="bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text block sm:inline">
-          {{ t("hero.name") }}
-        </span>
-        <span class="text-slate-900 dark:text-white transition-colors duration-300 block sm:inline">
-          {{ t("hero.portfolio") }}
-        </span>
+      <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight leading-tight flex justify-center items-center flex-wrap">
+        <span ref="nameElement" class="bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text min-h-[1.2em]"></span>
+        <span class="inline-block w-[3px] sm:w-[4px] md:w-[6px] h-[0.9em] bg-teal-500 ml-1 sm:ml-2 animate-pulse mt-1"></span>
       </h1>
 
       <p class="text-slate-600 dark:text-gray-400 text-base md:text-lg max-w-xl md:max-w-2xl mb-8 md:mb-10 transition-colors duration-300 px-2">
@@ -94,16 +121,6 @@ function scrollToProjects() {
           class="bg-[#20b2aa] hover:bg-teal-500 text-white px-6 py-3 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
         >
           {{ t("hero.viewProjects") }} <span>→</span>
-        </button>
-
-        <button
-          class="bg-white dark:bg-[#1a1a24] hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-900 dark:text-white border border-slate-300 dark:border-gray-700 px-6 py-3 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
-        >
-          {{ t("hero.downloadCV") }}
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
         </button>
       </div>
     </div>

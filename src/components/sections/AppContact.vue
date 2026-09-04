@@ -1,7 +1,57 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/valibot'
+import * as v from 'valibot'
+import { push } from 'notivue'
 
 const { t } = useI18n()
+
+const schema = computed(() => toTypedSchema(
+  v.object({
+    name: v.pipe(v.string(), v.nonEmpty(t('contact.form.errors.nameRequired'))),
+    email: v.pipe(
+      v.string(),
+      v.nonEmpty(t('contact.form.errors.emailRequired')),
+      v.email(t('contact.form.errors.emailInvalid'))
+    ),
+    message: v.pipe(v.string(), v.nonEmpty(t('contact.form.errors.messageRequired'))),
+  })
+))
+
+const { defineField, handleSubmit, errors, resetForm } = useForm({
+  validationSchema: schema,
+})
+
+const [formName] = defineField('name')
+const [formEmail] = defineField('email')
+const [formMessage] = defineField('message')
+
+const status = ref<'idle' | 'loading'>('idle')
+
+const submitForm = handleSubmit(async (values) => {
+  status.value = 'loading'
+  try {
+    const response = await fetch('/.netlify/functions/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+
+    if (!response.ok) throw new Error('Failed to send')
+    
+    push.success(t('contact.form.success'))
+    resetForm()
+    status.value = 'idle'
+  } catch (error) {
+    console.error(error)
+    push.error(t('contact.form.error'))
+    status.value = 'idle'
+  }
+})
 
 interface ContactLink {
   key: string
@@ -113,48 +163,74 @@ const colorMap: Record<string, { icon: string; hover: string }> = {
             {{ t('contact.form.title') }}
           </h3>
 
-          <form class="flex flex-col gap-4" @submit.prevent>
+          <form class="flex flex-col gap-4" @submit.prevent="submitForm">
             <div>
-              <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1.5 uppercase tracking-wider">
-                {{ t('contact.form.name') }}
-              </label>
+              <div class="flex justify-between items-center mb-1.5">
+                <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 uppercase tracking-wider">
+                  {{ t('contact.form.name') }}
+                </label>
+                <span v-if="errors.name" class="text-xs font-medium text-red-500 dark:text-red-400">{{ errors.name }}</span>
+              </div>
               <input
                 type="text"
+                v-model="formName"
+                :disabled="status === 'loading'"
                 :placeholder="t('contact.form.namePlaceholder')"
-                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors"
+                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors disabled:opacity-50"
+                :class="{ 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500/30': errors.name }"
               />
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1.5 uppercase tracking-wider">
-                {{ t('contact.form.email') }}
-              </label>
+              <div class="flex justify-between items-center mb-1.5">
+                <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 uppercase tracking-wider">
+                  {{ t('contact.form.email') }}
+                </label>
+                <span v-if="errors.email" class="text-xs font-medium text-red-500 dark:text-red-400">{{ errors.email }}</span>
+              </div>
               <input
                 type="email"
+                v-model="formEmail"
+                :disabled="status === 'loading'"
                 :placeholder="t('contact.form.emailPlaceholder')"
-                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors"
+                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors disabled:opacity-50"
+                :class="{ 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500/30': errors.email }"
               />
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1.5 uppercase tracking-wider">
-                {{ t('contact.form.message') }}
-              </label>
+              <div class="flex justify-between items-center mb-1.5">
+                <label class="block text-xs font-medium text-slate-600 dark:text-gray-400 uppercase tracking-wider">
+                  {{ t('contact.form.message') }}
+                </label>
+                <span v-if="errors.message" class="text-xs font-medium text-red-500 dark:text-red-400">{{ errors.message }}</span>
+              </div>
               <textarea
                 rows="5"
+                v-model="formMessage"
+                :disabled="status === 'loading'"
                 :placeholder="t('contact.form.messagePlaceholder')"
-                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors resize-none"
+                class="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/30 transition-colors resize-none disabled:opacity-50"
+                :class="{ 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500/30': errors.message }"
               ></textarea>
             </div>
 
+            <!-- Success/Error Messages handled by Notivue -->
+
             <button
               type="submit"
-              class="w-full bg-[#20b2aa] hover:bg-teal-500 text-white py-3 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+              :disabled="status === 'loading'"
+              class="w-full bg-[#20b2aa] hover:bg-teal-500 text-white py-3 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {{ t('contact.form.send') }}
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-              </svg>
+              <template v-if="status === 'loading'">
+                {{ t('contact.form.sending') }}
+              </template>
+              <template v-else>
+                {{ t('contact.form.send') }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+              </template>
             </button>
           </form>
         </div>

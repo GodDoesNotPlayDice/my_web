@@ -131,7 +131,7 @@ export const en = {
       },
       {
         period: '2026',
-        title: 'Language Learning App',
+        title: 'Yozh — Language Learning App',
         company: '',
         description: 'Development of an innovative web and mobile application designed to facilitate language learning interactively. A personal project that combines my technical skills with my passion for education and technology.',
       }
@@ -142,7 +142,7 @@ export const en = {
     subtitle:
       "A selection of projects that reflect my technical trajectory and ability to create end-to-end solutions.",
     viewProject: "View Project",
-    comingSoon: "Coming Soon",
+    comingSoon: "",
     noImage: "Image coming soon",
     items: [
       {
@@ -158,7 +158,7 @@ export const en = {
         description: 'Scalable retail scraper built with Clean Architecture and DDD, capable of processing large volumes of product data robustly and maintainably.',
       },
       {
-        title: 'Language Learning App',
+        title: 'Yozh — Language Learning App',
         description: 'Web and mobile application in development for interactive language learning. Combines gamification, writing practice, listening, and contextual vocabulary.',
       }
     ]
@@ -168,6 +168,8 @@ export const en = {
     subtitle:
       "Degrees and certifications that support my technical training and commitment to continuous learning.",
     viewFull: "View full certificate",
+    showMore: "Show more",
+    showLess: "Show less",
     issuer: "Issuer",
     date: "Date",
     noImage: "Image coming soon",
@@ -232,12 +234,21 @@ export const en = {
     form: {
       title: "Send me a message",
       name: "Name",
-      namePlaceholder: "Your name",
+      namePlaceholder: "your name",
       email: "Email",
-      emailPlaceholder: "you@email.com",
+      emailPlaceholder: "email",
       message: "Message",
-      messagePlaceholder: "Tell me about your project or idea...",
+      messagePlaceholder: "tell me about your project or idea...",
       send: "Send Message",
+      sending: "Sending...",
+      success: "Message sent successfully!",
+      error: "Failed to send message.",
+      errors: {
+        nameRequired: "Name is required",
+        emailRequired: "Email is required",
+        emailInvalid: "Invalid email",
+        messageRequired: "Message is required",
+      }
     },
     links: {
       email: "Email",

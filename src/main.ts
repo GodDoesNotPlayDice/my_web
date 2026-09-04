@@ -18,6 +18,16 @@ const i18n = createI18n({
 
 const app = createApp(App);
 
+import { createNotivue } from 'notivue'
+import 'notivue/notification.css'
+import 'notivue/animations.css'
+
+const notivue = createNotivue({
+  position: 'top-right',
+  limit: 4,
+  enqueue: true,
+})
+
 app.use(Particles, {
   init: async (engine: unknown) => {
     await loadSlim(engine as Engine);
@@ -25,4 +35,5 @@ app.use(Particles, {
 });
 
 app.use(i18n);
+app.use(notivue);
 app.mount("#app");
