@@ -15,7 +15,7 @@ export const es = {
   hero: {
     subtitle: "Ingeniero Informático",
     name: "Vicente Vasquez",
-    portfolio: " - Portafolio",
+    portfolioTitle: "Portafolio",
     description:
       "Una muestra de mis proyectos, habilidades y logros en el campo de la ingeniería y el desarrollo de software.",
     viewProjects: "Ver Proyectos",

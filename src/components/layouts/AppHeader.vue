@@ -65,7 +65,7 @@ const navigationLinks = computed(() => [
       <!-- Sidebar header -->
       <div class="flex items-center justify-between px-5 py-5 border-b border-slate-100 dark:border-gray-800">
         <span class="text-lg font-extrabold bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text">
-          Portafolio
+          {{ t("hero.portfolioTitle") }}
         </span>
         <button
           @click="mobileMenuOpen = false"
@@ -122,7 +122,7 @@ const navigationLinks = computed(() => [
 
       <!-- Logo -->
       <h2 class="text-xl md:text-2xl font-extrabold bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text hover:scale-105 transition-transform duration-300 cursor-pointer flex-shrink-0">
-        <a @click.prevent="scrollToSection('hero')" href="#hero">Portafolio</a>
+        <a @click.prevent="scrollToSection('hero')" href="#hero">{{ t("hero.portfolioTitle") }}</a>
       </h2>
 
       <!-- Desktop nav — left, beside logo -->

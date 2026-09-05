@@ -27,20 +27,20 @@ onMounted(() => {
     { text: "" },
     {
       duration: 1.5,
-      text: t("hero.name") + t("hero.portfolio"),
+      text: t("hero.name"),
       ease: "none",
       delay: 0.3,
     }
   );
 });
 
-watch(() => t("hero.name") + t("hero.portfolio"), (newText) => {
+watch(() => t("hero.name"), (newName) => {
   gsap.fromTo(
     nameElement.value,
     { text: "" },
     {
       duration: 1.5,
-      text: newText,
+      text: newName,
       ease: "none",
     }
   );

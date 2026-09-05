@@ -33,22 +33,49 @@ const status = ref<'idle' | 'loading'>('idle')
 const submitForm = handleSubmit(async (values) => {
   status.value = 'loading'
   try {
-    const response = await fetch('/.netlify/functions/send-email', {
+    const cfTokenElement = document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement;
+    const cfToken = cfTokenElement ? cfTokenElement.value : '';
+
+    if (!cfToken) {
+      push.error('Please complete the captcha');
+      status.value = 'idle';
+      return;
+    }
+
+    const payload = {
+      ...values,
+      cfToken
+    };
+
+    const response = await fetch('/api/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(payload),
     })
 
-    if (!response.ok) throw new Error('Failed to send')
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to send')
+    }
     
     push.success(t('contact.form.success'))
     resetForm()
+    
+    // Explicitly clear fields just in case
+    formName.value = ''
+    formEmail.value = ''
+    formMessage.value = ''
+
+    if ((window as any).turnstile) {
+      (window as any).turnstile.reset()
+    }
+
     status.value = 'idle'
-  } catch (error) {
+  } catch (error: any) {
     console.error(error)
-    push.error(t('contact.form.error'))
+    push.error(error.message || t('contact.form.error'))
     status.value = 'idle'
   }
 })
@@ -99,6 +126,7 @@ const colorMap: Record<string, { icon: string; hover: string }> = {
     hover: 'hover:border-indigo-300 dark:hover:border-indigo-800',
   },
 }
+const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 </script>
 
 <template>
@@ -218,6 +246,13 @@ const colorMap: Record<string, { icon: string; hover: string }> = {
             </div>
 
             <!-- Success/Error Messages handled by Notivue -->
+
+            <!-- Cloudflare Turnstile -->
+            <div
+              class="cf-turnstile mt-2"
+              :data-sitekey="turnstileSiteKey"
+              data-theme="auto"
+            ></div>
 
             <button
               type="submit"

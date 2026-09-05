@@ -15,7 +15,7 @@ export const en = {
   hero: {
     subtitle: "Software Engineer",
     name: "Vicente Vasquez",
-    portfolio: " - Portfolio",
+    portfolioTitle: "Portfolio",
     description:
       "A showcase of my projects, skills, and achievements in the field of engineering and software development.",
     viewProjects: "View Projects",
