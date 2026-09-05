@@ -23,7 +23,7 @@ import 'notivue/notification.css'
 import 'notivue/animations.css'
 
 const notivue = createNotivue({
-  position: 'top-right',
+  position: 'top-center',
   limit: 4,
   enqueue: true,
 })
