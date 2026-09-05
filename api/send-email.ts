@@ -55,7 +55,7 @@ export default async (req: Request) => {
       body: turnstileFormData
     });
     
-    const turnstileData = await turnstileRes.json();
+    const turnstileData = (await turnstileRes.json()) as { success: boolean };
     if (!turnstileData.success) {
       return new Response(JSON.stringify({ error: 'Turnstile verification failed' }), {
         status: 400,
