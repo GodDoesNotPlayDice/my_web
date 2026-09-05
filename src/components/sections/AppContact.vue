@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/valibot'
@@ -33,11 +33,10 @@ const status = ref<'idle' | 'loading'>('idle')
 const submitForm = handleSubmit(async (values) => {
   status.value = 'loading'
   try {
-    const cfTokenElement = document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement;
-    const cfToken = cfTokenElement ? cfTokenElement.value : '';
+    const cfToken = (window as any).turnstile ? (window as any).turnstile.getResponse(turnstileWidgetId) : '';
 
     if (!cfToken) {
-      push.error('Please complete the captcha');
+      push.error(t('contact.form.errors.captchaRequired'));
       status.value = 'idle';
       return;
     }
@@ -56,8 +55,11 @@ const submitForm = handleSubmit(async (values) => {
     })
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error(t('contact.form.errors.rateLimit'))
+      }
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || 'Failed to send')
+      throw new Error(errorData.error || t('contact.form.errors.serverError'))
     }
     
     push.success(t('contact.form.success'))
@@ -69,13 +71,13 @@ const submitForm = handleSubmit(async (values) => {
     formMessage.value = ''
 
     if ((window as any).turnstile) {
-      (window as any).turnstile.reset()
+      (window as any).turnstile.reset(turnstileWidgetId)
     }
 
     status.value = 'idle'
   } catch (error: any) {
     console.error(error)
-    push.error(error.message || t('contact.form.error'))
+    push.error(error.message || t('contact.form.errors.serverError'))
     status.value = 'idle'
   }
 })
@@ -127,6 +129,35 @@ const colorMap: Record<string, { icon: string; hover: string }> = {
   },
 }
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+const turnstileContainer = ref<HTMLElement | null>(null);
+let turnstileWidgetId = '';
+
+onMounted(() => {
+  const renderTurnstile = () => {
+    if (turnstileContainer.value && (window as any).turnstile) {
+      try {
+        turnstileWidgetId = (window as any).turnstile.render(turnstileContainer.value, {
+          sitekey: turnstileSiteKey,
+          theme: 'auto'
+        })
+      } catch (e) {
+        console.warn('Turnstile already rendered or error:', e)
+      }
+    }
+  }
+
+  if ((window as any).turnstile) {
+    renderTurnstile()
+  } else {
+    // Wait for the script to load
+    const interval = setInterval(() => {
+      if ((window as any).turnstile) {
+        clearInterval(interval)
+        renderTurnstile()
+      }
+    }, 200)
+  }
+})
 </script>
 
 <template>
@@ -249,9 +280,8 @@ const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x000000000
 
             <!-- Cloudflare Turnstile -->
             <div
-              class="cf-turnstile mt-2"
-              :data-sitekey="turnstileSiteKey"
-              data-theme="auto"
+              class="mt-2 min-h-[65px]"
+              ref="turnstileContainer"
             ></div>
 
             <button

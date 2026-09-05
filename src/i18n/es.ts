@@ -248,6 +248,9 @@ export const es = {
         emailRequired: "El correo es requerido",
         emailInvalid: "Correo inválido",
         messageRequired: "El mensaje es requerido",
+        captchaRequired: "Por favor, completa el captcha",
+        rateLimit: "Demasiadas peticiones. Por favor, intenta más tarde.",
+        serverError: "Error al enviar el mensaje. Intenta de nuevo.",
       }
     },
     links: {

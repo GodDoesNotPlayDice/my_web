@@ -248,6 +248,9 @@ export const en = {
         emailRequired: "Email is required",
         emailInvalid: "Invalid email",
         messageRequired: "Message is required",
+        captchaRequired: "Please complete the captcha",
+        rateLimit: "Too many requests. Please try again later.",
+        serverError: "Failed to send message. Please try again.",
       }
     },
     links: {
