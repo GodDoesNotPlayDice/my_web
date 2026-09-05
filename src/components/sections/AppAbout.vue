@@ -17,18 +17,18 @@ const { t } = useI18n()
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
 
         <!-- Image — hidden on mobile, shown on lg -->
-        <div class="hidden lg:block w-full h-full relative">
+        <div class="hidden lg:block w-full aspect-square relative">
           <img
             src="/me2.jpg"
-            alt="Workspace"
-            class="w-full h-full object-cover rounded-xl shadow-lg dark:shadow-none"
+            alt="Vicente Vasquez"
+            class="w-full h-full object-cover object-center rounded-xl shadow-lg dark:shadow-none"
           />
         </div>
 
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-start">
           <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 md:mb-4 transition-colors">
             {{ t('about.role') }}
           </h3>
