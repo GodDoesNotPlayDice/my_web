@@ -22,7 +22,7 @@ const { t } = useI18n()
         <!-- Image — hidden on mobile, shown on lg -->
         <div class="hidden lg:block w-full h-full relative">
           <img
-            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            src="/me2.jpg"
             alt="Workspace"
             class="w-full h-full object-cover rounded-xl shadow-lg dark:shadow-none"
           />
