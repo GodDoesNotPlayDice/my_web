@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t, tm } = useI18n()
 
@@ -14,147 +13,184 @@ interface ExperienceItemData {
 
 interface ExperienceItemStatic {
   tags: string[]
-  icon: string
-  accent: 'teal' | 'indigo' | 'orange'
+  accent: 'cyan' | 'purple' | 'amber' | 'emerald'
   inProgress?: boolean
 }
 
 const staticItems: ExperienceItemStatic[] = [
   {
-    tags: ['HTML', 'CSS', 'JavaScript', 'Python'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`,
-    accent: 'teal',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Python'],
+    accent: 'cyan',
   },
   {
-    tags: ['Vue.js', 'Python', 'FastAPI', 'Arquitectura de Software', 'Ciencia de Datos'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>`,
-    accent: 'indigo',
+    tags: ['Ingeniería Informática', 'Duoc UC', 'Ciencia de Datos', '2 Distinciones'],
+    accent: 'purple',
   },
   {
-    tags: ['Vue.js', 'Python', 'FastAPI', 'PostgreSQL', 'Supabase'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`,
-    accent: 'teal',
+    tags: ['Vue.js 3', 'Nuxt 3', 'Python', 'FastAPI', 'Supabase', 'Resend'],
+    accent: 'cyan',
   },
   {
-    tags: ['Nuxt', 'TypeScript', 'Netlify', 'Resend', 'Supabase'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
-    accent: 'orange',
+    tags: ['Nuxt 3', 'TypeScript', 'Netlify CI/CD', 'Resend', 'Supabase'],
+    accent: 'amber',
   },
   {
     tags: ['Python', 'Playwright', 'Clean Architecture', 'DDD', 'MongoDB'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
-    accent: 'indigo',
+    accent: 'emerald',
   },
   {
-    tags: ['Vue.js', 'Nuxt', 'Python', 'FastAPI', 'Supabase'],
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>`,
-    accent: 'teal',
+    tags: ['Vue 3', 'Nuxt', 'Supabase', 'PWA', 'GSAP', 'AI Engine'],
+    accent: 'purple',
     inProgress: true,
   },
 ]
 
 const items = computed(() => {
-  const translations = tm('experience.items') as ExperienceItemData[]
+  const translations = (tm('experience.items') as ExperienceItemData[]) || []
+  const badges = (tm('experience.typeBadges') as string[]) || []
+  const tagsList = (tm('experience.tagLists') as string[][]) || []
+
   return translations.map((item, index) => ({
     ...item,
-    ...staticItems[index]
+    ...staticItems[index],
+    tags: tagsList[index] || staticItems[index]?.tags || [],
+    typeBadge: badges[index] || '',
   }))
 })
 
-const accentMap = {
-  teal: {
-    dot: 'bg-[#20b2aa] shadow-teal-500/30',
-    badge: 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
-    tag: 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800',
-    border: 'hover:border-teal-300 dark:hover:border-teal-800',
+const accentStyles: Record<string, { dot: string; badge: string; border: string; glow: string }> = {
+  cyan: {
+    dot: 'bg-cyan-400 shadow-[0_0_12px_#00d9ff]',
+    badge: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30',
+    border: 'hover:border-cyan-400/50',
+    glow: 'hover:shadow-[0_0_24px_rgba(0,217,255,0.12)]',
   },
-  indigo: {
-    dot: 'bg-indigo-500 shadow-indigo-500/30',
-    badge: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
-    tag: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
-    border: 'hover:border-indigo-300 dark:hover:border-indigo-800',
+  purple: {
+    dot: 'bg-purple-400 shadow-[0_0_12px_#a78bfa]',
+    badge: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+    border: 'hover:border-purple-400/50',
+    glow: 'hover:shadow-[0_0_24px_rgba(167,139,250,0.12)]',
   },
-  orange: {
-    dot: 'bg-orange-400 shadow-orange-400/30',
-    badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-    tag: 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
-    border: 'hover:border-orange-300 dark:hover:border-orange-800',
+  amber: {
+    dot: 'bg-amber-400 shadow-[0_0_12px_#f59e0b]',
+    badge: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+    border: 'hover:border-amber-400/50',
+    glow: 'hover:shadow-[0_0_24px_rgba(245,158,11,0.12)]',
+  },
+  emerald: {
+    dot: 'bg-emerald-400 shadow-[0_0_12px_#10b981]',
+    badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+    border: 'hover:border-emerald-400/50',
+    glow: 'hover:shadow-[0_0_24px_rgba(16,185,129,0.12)]',
   },
 }
 </script>
 
 <template>
-  <section id="experience" class="py-16 md:py-24 bg-slate-50 dark:bg-[#0d1117] transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-5 md:px-8 experience-content">
+  <section id="experience" class="py-24 md:py-32 relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10 experience-content">
 
-      <!-- Header -->
-      <div class="mb-10 md:mb-16">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-colors">
+      <!-- Section Header -->
+      <div class="text-center mb-14 md:mb-18">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">
+          {{ t('experience.kicker') }}
+        </div>
+
+        <h2
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"
+          style="font-family: 'Comfortaa', cursive;"
+        >
           {{ t('experience.title') }}
         </h2>
-        <div class="w-12 h-1 bg-[#20b2aa] mt-3 mb-4 md:mb-6"></div>
-        <p class="text-slate-600 dark:text-gray-400 max-w-2xl transition-colors text-sm md:text-base">
+
+        <div class="w-16 h-1 bg-gradient-to-r from-cyan-400 to-indigo-500 mx-auto mt-4 mb-4 rounded-full" />
+
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
           {{ t('experience.subtitle') }}
         </p>
       </div>
 
-      <!-- Timeline -->
+      <!-- High-Tech Circuit Timeline -->
       <div class="relative">
-        <!-- Vertical line -->
-        <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-indigo-500 to-orange-300 hidden md:block"></div>
+        <!-- Glowing vertical circuit spine -->
+        <div class="absolute left-4 md:left-8 top-4 bottom-4 w-[2px] bg-gradient-to-b from-cyan-400 via-purple-500 to-indigo-600 shadow-[0_0_10px_rgba(0,217,255,0.4)]" />
 
-        <div class="flex flex-col gap-8">
+        <div class="space-y-8 md:space-y-10">
           <div
             v-for="(item, index) in items"
             :key="index"
-            class="relative flex gap-4 md:gap-8 exp-item"
+            class="relative flex items-start gap-6 md:gap-10 exp-item group"
           >
-            <!-- Dot -->
-            <div class="hidden md:flex flex-col items-center flex-shrink-0">
+            <!-- Timeline Pulsing Node -->
+            <div class="relative flex items-center justify-center shrink-0 w-8 md:w-16 pt-1.5">
               <div
-                class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-10"
-                :class="accentMap[item.accent].dot"
-              >
-                <span class="w-5 h-5 text-white" v-html="item.icon"></span>
-              </div>
+                class="w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-[#050711] z-10 transition-transform duration-300 group-hover:scale-125"
+                :class="accentStyles[item.accent].dot"
+              />
+              <span
+                v-if="item.inProgress"
+                class="absolute w-8 h-8 rounded-full bg-purple-500/40 animate-ping"
+              />
             </div>
 
-            <!-- Card -->
+            <!-- Experience Card -->
             <div
-              class="flex-1 bg-white dark:bg-[#13131f] rounded-xl border border-slate-200 dark:border-gray-800 p-4 md:p-6 shadow-sm transition-all duration-300"
-              :class="accentMap[item.accent].border"
+              class="flex-1 p-6 sm:p-7 rounded-2xl bg-[#090f1f]/80 backdrop-blur-xl border border-white/10 transition-all duration-300 flex flex-col justify-between"
+              :class="[accentStyles[item.accent].border, accentStyles[item.accent].glow]"
             >
-              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+              <!-- Card Header -->
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 mb-3">
                 <div>
-                  <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ item.title }}</h3>
-                  <p v-if="item.company" class="text-sm text-slate-500 dark:text-gray-500 mt-0.5">{{ item.company }}</p>
-                </div>
-                <div class="flex items-center gap-2 flex-shrink-0">
                   <span
-                    class="text-xs font-semibold px-3 py-1 rounded-full"
-                    :class="accentMap[item.accent].badge"
+                    v-if="item.typeBadge"
+                    class="inline-block text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider mb-1.5"
+                    :class="accentStyles[item.accent].badge"
                   >
+                    {{ item.typeBadge }}
+                  </span>
+                  <h3 class="text-lg sm:text-xl font-bold font-mono text-white group-hover:text-cyan-300 transition-colors">
+                    {{ item.title }}
+                  </h3>
+                  <p v-if="item.company" class="text-xs font-mono text-cyan-400 mt-0.5">
+                    {{ item.company }}
+                  </p>
+                </div>
+
+                <!-- Period & In Progress Badge -->
+                <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+                  <span class="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
                     {{ item.period }}
                   </span>
                   <span
                     v-if="item.inProgress"
-                    class="inline-flex items-center gap-1 text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 px-2.5 py-1 rounded-full"
+                    class="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
                   >
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     {{ t('experience.inProgress') }}
                   </span>
                 </div>
               </div>
 
-              <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+              <!-- Description -->
+              <p class="text-sm text-slate-300 leading-relaxed mb-4 font-sans">
                 {{ item.description }}
               </p>
 
-
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
+                <span
+                  v-for="tag in item.tags"
+                  :key="tag"
+                  class="text-[11px] font-mono px-2.5 py-0.5 rounded bg-white/[0.03] border border-white/5 text-slate-400"
+                >
+                  {{ tag }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 </template>

@@ -1,166 +1,153 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t, tm } = useI18n()
 
-const academicCertifications = computed(() => tm('education.formal.certsList') as string[])
-
-const selfTaughtTech = [
-  'Frontend', 'Backend', 'IA', 'Cloud'
-]
+const academicCertifications = computed(() => (tm('education.formal.certsList') as string[]) || [])
+const selfTaughtTech = computed(() => (tm('education.selfTaught.techList') as string[]) || [])
 </script>
 
 <template>
-  <section id="education" class="py-16 md:py-24 bg-slate-50 dark:bg-[#0d1117] transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-5 md:px-8 education-content">
+  <section id="education" class="py-24 md:py-32 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 relative z-10 education-content">
 
-      <!-- Header -->
-      <div class="mb-10 md:mb-16">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-colors">
+      <!-- Section Header -->
+      <div class="text-center mb-14 md:mb-18">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          {{ t('education.kicker') }}
+        </div>
+
+        <h2
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"
+          style="font-family: 'Comfortaa', cursive;"
+        >
           {{ t('education.title') }}
         </h2>
-        <div class="w-12 h-1 bg-[#20b2aa] mt-3 mb-4 md:mb-6"></div>
-        <p class="text-slate-600 dark:text-gray-400 max-w-2xl transition-colors text-sm md:text-base">
+
+        <div class="w-16 h-1 bg-gradient-to-r from-cyan-400 to-indigo-500 mx-auto mt-4 mb-4 rounded-full" />
+
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
           {{ t('education.subtitle') }}
         </p>
       </div>
 
-      <!-- Timeline -->
-      <div class="relative">
-        <!-- Vertical line — only md+ -->
-        <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-indigo-500 to-orange-300 hidden md:block"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-        <!-- Item 1: Duoc UC -->
-        <div class="relative flex gap-4 md:gap-8 mb-8 md:mb-12 edu-item">
-          <!-- Dot -->
-          <div class="hidden md:flex flex-col items-center flex-shrink-0">
-            <div class="w-12 h-12 rounded-full bg-[#20b2aa] flex items-center justify-center shadow-lg shadow-teal-500/30 z-10">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-              </svg>
-            </div>
-          </div>
+        <!-- Main Card: Duoc UC Honors Degree (8 cols) -->
+        <div class="lg:col-span-8 p-7 sm:p-9 rounded-3xl bg-[#090f20]/80 backdrop-blur-xl border border-cyan-500/25 shadow-[0_0_50px_rgba(0,217,255,0.06)] relative overflow-hidden">
+          <div class="absolute top-3 right-3 w-4 h-4 border-t border-r border-cyan-400/50" />
+          <div class="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-cyan-400/50" />
 
-          <!-- Card -->
-          <div class="flex-1 bg-white dark:bg-[#13131f] rounded-xl border border-slate-200 dark:border-gray-800 p-5 md:p-6 shadow-sm transition-all duration-300">
-            <!-- Mobile dot accent -->
-            <div class="flex items-center gap-2 mb-3 md:hidden">
-              <div class="w-6 h-6 rounded-full bg-[#20b2aa] flex items-center justify-center flex-shrink-0">
-                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 14l9-5-9-5-9 5 9 5z"/>
-                </svg>
-              </div>
-              <span class="bg-teal-500/10 text-teal-600 dark:text-teal-400 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                {{ t('education.formal.label') }}
-              </span>
-            </div>
-
-            <span class="hidden md:inline-block bg-teal-500/10 text-teal-600 dark:text-teal-400 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
+          <!-- Formal Education Badge & Degree -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <span class="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-semibold uppercase tracking-wider">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               {{ t('education.formal.label') }}
             </span>
 
-            <div class="flex flex-col gap-3 mb-5 md:mb-6 md:flex-row md:items-start md:justify-between">
+            <!-- Distinction Honor Ribbon -->
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold shadow-[0_0_12px_rgba(245,158,11,0.2)]">
+              <svg class="w-3.5 h-3.5 fill-amber-300 text-amber-300 shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <span>{{ t('education.formal.distinction') }}</span>
+            </div>
+          </div>
+
+          <h3 class="text-2xl sm:text-3xl font-bold font-mono text-white mb-2">
+            {{ t('education.formal.degree') }}
+          </h3>
+
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-mono text-cyan-400 mb-6">
+            <span>{{ t('education.formal.institution') }}</span>
+            <span class="text-slate-500">·</span>
+            <span class="text-slate-400">{{ t('education.formal.campus') }}</span>
+            <span class="text-slate-500">·</span>
+            <span class="text-emerald-400 font-semibold">{{ t('education.formal.graduationDate') }}</span>
+          </div>
+
+          <!-- Specialization Highlight -->
+          <div class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/25 mb-6 flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300 shrink-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" />
+                </svg>
+              </div>
               <div>
-                <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white">
-                  {{ t('education.formal.degree') }}
-                </h3>
-                <p class="text-[#20b2aa] font-medium mt-1 text-sm md:text-base">{{ t('education.formal.institution') }}</p>
-                <p class="text-slate-500 dark:text-gray-500 text-xs md:text-sm mt-0.5">{{ t('education.formal.campus') }}</p>
-              </div>
-              <div class="flex flex-row md:flex-col items-center md:items-end gap-2 flex-shrink-0 flex-wrap">
-                <span class="text-xs md:text-sm text-slate-500 dark:text-gray-400">{{ t('education.formal.graduated') }}</span>
-                <span class="text-xs md:text-sm font-semibold text-slate-800 dark:text-gray-200">{{ t('education.formal.graduationDate') }}</span>
-                <span class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs px-2.5 py-1 rounded-full font-medium">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  {{ t('education.formal.distinction') }}
-                </span>
+                <div class="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  {{ t('education.formal.specialty') }}
+                </div>
+                <div class="text-[11px] font-mono text-purple-300">
+                  {{ t('education.formal.specialtyDesc') }}
+                </div>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 mb-5 md:mb-6">
-              <span class="inline-flex items-center gap-1.5 bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs md:text-sm px-3 py-1.5 rounded-lg font-medium">
-                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                {{ t('education.formal.specialty') }}
-              </span>
-              <span class="text-slate-500 dark:text-gray-500 text-xs flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5 text-[#20b2aa]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {{ t('education.formal.certDate') }}
-              </span>
+            <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/40">
+              {{ t('education.formal.honorsTrack') }}
+            </span>
+          </div>
+
+          <!-- Academic Certifications Sub-grid -->
+          <div>
+            <div class="text-xs font-mono uppercase text-slate-400 tracking-wider mb-3 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              <span>{{ t('education.formal.certifications') }}</span>
             </div>
 
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-gray-500 mb-3">
-                {{ t('education.formal.certifications') }}
-              </p>
-              <div class="flex flex-wrap gap-1.5 md:gap-2">
-                <span
-                  v-for="cert in academicCertifications"
-                  :key="cert"
-                  class="text-xs bg-slate-100 dark:bg-[#1a1a2e] text-slate-600 dark:text-gray-400 px-2 md:px-2.5 py-1 rounded-md border border-slate-200 dark:border-gray-700"
-                >
-                  {{ cert }}
-                </span>
-              </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                v-for="cert in academicCertifications"
+                :key="cert"
+                class="text-xs font-mono px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-300 transition-colors"
+              >
+                {{ cert }}
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- Item 2: Self-taught -->
-        <div class="relative flex gap-4 md:gap-8 edu-item">
-          <div class="hidden md:flex flex-col items-center flex-shrink-0">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-orange-400 flex items-center justify-center shadow-lg shadow-indigo-500/30 z-10">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-          </div>
+        <!-- Right Card: Self-Taught Spirit (4 cols) -->
+        <div class="lg:col-span-4 p-7 sm:p-8 rounded-3xl bg-[#090f20]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_50px_rgba(167,139,250,0.06)] relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-3 right-3 w-4 h-4 border-t border-r border-purple-400/50" />
 
-          <div class="flex-1 bg-white dark:bg-[#13131f] rounded-xl border border-slate-200 dark:border-gray-800 p-5 md:p-6 shadow-sm transition-all duration-300">
-            <!-- Mobile accent -->
-            <div class="flex items-center gap-2 mb-3 md:hidden">
-              <div class="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-orange-400 flex items-center justify-center flex-shrink-0">
-                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-              </div>
-              <span class="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                {{ t('education.selfTaught.label') }}
-              </span>
-            </div>
-
-            <span class="hidden md:inline-block bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
+          <div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 font-semibold uppercase tracking-wider mb-4">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400" />
               {{ t('education.selfTaught.label') }}
             </span>
 
-            <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-2 md:mb-3">
+            <h3 class="text-xl font-bold font-mono text-white mb-3">
               {{ t('education.selfTaught.title') }}
             </h3>
-            <p class="text-slate-600 dark:text-gray-400 mb-5 md:mb-6 leading-relaxed text-sm md:text-base">
+
+            <p class="text-sm text-slate-300 leading-relaxed mb-6 font-sans">
               {{ t('education.selfTaught.description') }}
             </p>
+          </div>
 
-            <div class="flex flex-wrap gap-1.5 md:gap-2">
+          <div>
+            <div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-3">
+              {{ t('education.selfTaught.skillsExpanded') }}
+            </div>
+
+            <div class="flex flex-wrap gap-1.5">
               <span
                 v-for="tech in selfTaughtTech"
                 :key="tech"
-                class="text-xs bg-gradient-to-r from-teal-500/10 to-indigo-500/10 text-teal-700 dark:text-teal-300 px-2.5 md:px-3 py-1 md:py-1.5 rounded-lg border border-teal-200 dark:border-teal-900 font-medium"
+                class="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/10 text-slate-300"
               >
                 {{ tech }}
               </span>
             </div>
           </div>
         </div>
+
       </div>
+
     </div>
   </section>
 </template>

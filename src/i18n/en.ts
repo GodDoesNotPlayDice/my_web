@@ -2,12 +2,13 @@ export const en = {
   nav: {
     home: "Home",
     about: "About Me",
-    education: "Education",
     skills: "Skills",
     experience: "Experience",
     projects: "Projects",
+    education: "Education",
     certificates: "Certificates",
     contact: "Contact",
+    comms: "Comms",
   },
   buttons: {
     contact: "Contact Me",
@@ -20,6 +21,75 @@ export const en = {
       "A showcase of my projects, skills, and achievements in the field of engineering and software development.",
     viewProjects: "View Projects",
     downloadCV: "Download CV",
+    contactMe: "Contact Me",
+    discordCopied: "Discord handle copied to clipboard: notxaxa_",
+    status: "AVAILABLE // CHILE & REMOTE",
+    kicker: "FULL-STACK · DATA SCIENCE · SYSTEMS ARCHITECT",
+    roles: [
+      "FULL-STACK ENGINEER",
+      "PYTHON & VUE.JS ARCHITECT",
+      "CLEAN ARCHITECTURE & DDD",
+      "DATA SCIENCE SPECIALIST",
+      "SCALABLE SYSTEMS BUILDER",
+    ],
+    card: {
+      spec: "SPEC: 01 // DEV_ENG",
+      tapToFlip: "TAP TO FLIP",
+      hoverHint: "[ HOVER TO TILT · CLICK TO FLIP ]",
+      honorsTrack: "HONORS TRACK",
+      honorsDesc: "Graduated with academic honors and specialization in Data Science.",
+      coreCompetencies: "Core Competencies:",
+      competenciesList: [
+        "Software Architecture",
+        "Data Science",
+        "Project Management",
+        "Software Quality",
+      ],
+      readyToBuild: "READY TO BUILD",
+    },
+  },
+  activity: {
+    kicker: "LIVE METRICS // CODE TELEMETRY",
+    title: "Activity & Algorithms",
+    subtitle:
+      "Real-time telemetry tracking GitHub workflow activity and algorithmic problem-solving on LeetCode.",
+    github: {
+      title: "GitHub Activity",
+      handle: "@GodDoesNotPlayDice",
+      contributionsYear: "Contributions in the last year",
+      totalCommits: "399+ commits",
+      currentStreak: "Current Streak",
+      longestStreak: "Max Streak",
+      publicRepos: "Public Repositories",
+      viewProfile: "View GitHub Profile",
+      less: "Less",
+      more: "More",
+      days: { mon: "Mon", wed: "Wed", fri: "Fri" },
+      months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    },
+    leetcode: {
+      title: "LeetCode Submissions",
+      handle: "@GodDoesNotPlayDice",
+      submissionsYear: "Submissions in the past one year",
+      totalSubmissions: "248+ submissions",
+      activeDays: "Active Days",
+      currentStreak: "Current Streak",
+      longestStreak: "Max Streak",
+      solved: "Problems Solved",
+      acceptanceRate: "Acceptance Rate",
+      ranking: "Global Ranking",
+      easy: "Easy",
+      medium: "Medium",
+      hard: "Hard",
+      topics: "Key Algorithmic Areas",
+      viewProfile: "View LeetCode Profile",
+      less: "Less",
+      more: "More",
+      days: { mon: "Mon", wed: "Wed", fri: "Fri" },
+      months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      submission: "submission",
+      submissions: "submissions",
+    },
   },
   about: {
     title: "About Me",
@@ -28,18 +98,195 @@ export const en = {
     role: "Software Engineer",
     description:
       "I am a recently graduated Computer Engineer with a strong passion for web development and system architecture. My journey combines a solid foundation in Python with the Vue.js ecosystem, applying engineering principles to build scalable platforms like e-commerces and modern tools.",
+    kicker: "PERSONA // PROFILE MATRIX",
+    location: "CHILE (VIÑA DEL MAR / SANTIAGO) · REMOTE READY",
+    dnaTitle: "CORE ENGINEERING DNA",
+    dnaFooter: "PRINCIPLES // ROBUSTNESS",
+    dnaCommitment: "100% COMMITTED",
     stats: {
       education: { label: "Education", value: "B.S. Computer Engineering" },
       experience: { label: "Experience", value: "Full-Stack Development" },
       projects: { label: "Projects", value: "Lanas Curauma & more" },
       stack: { label: "Core Stack", value: "Python, Vue, Supabase" },
     },
+    pillars: [
+      {
+        title: "Clean Architecture & DDD",
+        desc: "Strict separation of domain logic, adapters, and infrastructure for testable, long-lived codebases.",
+      },
+      {
+        title: "End-to-End Full-Stack",
+        desc: "From reactive Vue 3/Nuxt frontend systems to Python FastAPI/Django microservices and Supabase data layers.",
+      },
+      {
+        title: "Data Science & Scraping",
+        desc: "Specialized training in data pipelines, analytics, batch processing, and robust automated scraping.",
+      },
+      {
+        title: "Production Deployments",
+        desc: "Continuous integration, serverless functions, automated transactional emails with Resend, and zero downtime.",
+      },
+    ],
     button: "Learn More",
+  },
+  skills: {
+    title: "Skills",
+    subtitle:
+      "A comprehensive technical stack built through real experience in professional and personal projects.",
+    kicker: "TECHNICAL EXPERTISE // THE TECH FORGE",
+    learning: "(learning)",
+    globe: {
+      interactive: "3D INTERACTIVE FORGE // DRAG TO ROTATE",
+      dragHint: "DRAG TO ROTATE",
+      pause: "PAUSE",
+      rotate: "ROTATE",
+      reset: "RESET",
+    },
+    filterTabs: {
+      all: "All Stack",
+      frontend: "Frontend",
+      backend: "Backend",
+      database: "Databases",
+      devops: "DevOps & Cloud",
+      architecture: "Architecture & Tools",
+    },
+    categoryDescriptions: {
+      frontend: "Modern, high-performance UI engineering with reactive state and fluid animations.",
+      backend: "Scalable services, RESTful API design, and asynchronous data processing pipelines.",
+      databases: "Relational & non-relational database design, indexing, and real-time synchronization.",
+      devops: "Production infrastructure, continuous delivery, and cloud orchestration.",
+      tools: "Domain-driven design (DDD), clean software architecture, and automated testing.",
+      soft: "Engineering mindset, autonomous problem-solving, and cross-functional leadership.",
+    },
+    categories: {
+      frontend: "Frontend",
+      backend: "Backend",
+      databases: "Databases",
+      devops: "DevOps & Cloud",
+      tools: "Tools & Architecture",
+      soft: "Soft Skills",
+    },
+    softList: [
+      "Communication",
+      "Leadership",
+      "Teamwork",
+      "Self-Taught",
+      "English B1-B2",
+      "Honesty",
+      "Patience",
+    ],
+  },
+  experience: {
+    title: "Experience",
+    subtitle:
+      "A continuous technical growth from the first lines of code to comprehensive professional solutions.",
+    kicker: "CHRONOLOGY // ENGINEERING TIMELINE",
+    present: "Present",
+    inProgress: "In progress",
+    typeBadges: [
+      "SELF-TAUGHT ORIGINS",
+      "ACADEMIC EXCELLENCE",
+      "PRODUCTION CRM",
+      "E-COMMERCE DROPSHIPPING",
+      "HIGH-SCALE SCRAPER",
+      "ACTIVE GAMIFIED PWA",
+    ],
+    tagLists: [
+      ["HTML5", "CSS3", "JavaScript", "Python"],
+      ["Computer Engineering", "Duoc UC", "Data Science", "2 Distinction Votes"],
+      ["Vue.js 3", "Nuxt 3", "Python", "FastAPI", "Supabase", "Resend"],
+      ["Nuxt 3", "TypeScript", "Netlify CI/CD", "Resend", "Supabase"],
+      ["Python", "Playwright", "Clean Architecture", "DDD", "MongoDB"],
+      ["Vue 3", "Nuxt", "Supabase", "PWA", "GSAP", "AI Engine"],
+    ],
+    items: [
+      {
+        period: "2019",
+        title: "Self-Taught Beginning",
+        company: "",
+        description:
+          "At 18, I started exploring web development and programming independently, building solid fundamentals with HTML, CSS, JavaScript, and Python through personal projects and online resources.",
+      },
+      {
+        period: "2021 – 2025",
+        title: "Duoc UC — Computer Engineering",
+        company: "Duoc UC Professional Institute · Viña del Mar",
+        description:
+          "Advanced proficiency in modern frontend and backend frameworks. Specialization in Data Science and multiple academic certifications. Graduated on December 24, 2025, with 2 distinction votes.",
+      },
+      {
+        period: "2023 – 2026",
+        title: "Mager.cl — Landing & CRM",
+        company: "Mager Real Estate",
+        description:
+          "Development of a professional landing page and a custom CRM platform for the real estate agency Mager.cl. Complete solution including client management, properties, and automated contact flows.",
+      },
+      {
+        period: "2025 – 2026",
+        title: "Lanascurauma.cl — E-commerce",
+        company: "Lanas Curauma",
+        description:
+          "Deployment of a complete e-commerce platform under the dropshipping model. Optimized with Netlify for CI/CD and Resend for automated transactional notifications.",
+      },
+      {
+        period: "2025",
+        title: "Gearlabs — Retail Scraper",
+        company: "Gearlabs",
+        description:
+          "Creation of a robust and scalable retail scraper ensuring code quality through Clean Architecture and Domain-Driven Design (DDD). Solution capable of processing large volumes of product data.",
+      },
+      {
+        period: "2026",
+        title: "Yozh — Language Learning App",
+        company: "",
+        description:
+          "Development of an innovative web and mobile application designed to facilitate interactive language learning. A personal project combining technical skills with a passion for education and technology.",
+      },
+    ],
+  },
+  projects: {
+    title: "Projects",
+    subtitle:
+      "A selection of projects that reflect my technical journey and ability to create end-to-end solutions.",
+    kicker: "SYSTEMS & DEPLOYMENTS // CASE STUDIES",
+    viewProject: "View Project",
+    comingSoon: "Coming soon",
+    noImage: "Image coming soon",
+    activeBadge: "PROD // ACTIVE",
+    highlights: [
+      "Full-Stack CRM & Real Estate Portal with Automated Email Pipeline",
+      "Serverless E-Commerce with Transactional Notifications & Continuous Delivery",
+      "High-Volume Retail Scraping Engine with Domain-Driven Design Separation",
+      "Interactive Gamified Language Engine with Contextual Vocabulary & AI Practice",
+    ],
+    items: [
+      {
+        title: "Mager.cl — CRM & Landing Page",
+        description:
+          "Custom CRM platform and professional landing page for Mager.cl real estate agency. Includes client management, property listings, and automated contact pipelines.",
+      },
+      {
+        title: "Lanascurauma.cl — E-commerce",
+        description:
+          "Full e-commerce platform under dropshipping model with continuous deployment on Netlify and automated transactional emails via Resend.",
+      },
+      {
+        title: "Gearlabs — Retail Scraper",
+        description:
+          "Scalable retail scraper built with Clean Architecture and DDD, engineered to process high-volume product catalogs reliably and maintainably.",
+      },
+      {
+        title: "Yozh — Language Learning App",
+        description:
+          "Gamified interactive web & mobile app for contextual language learning. Features handwriting practice, listening challenges, and conversational AI practice.",
+      },
+    ],
   },
   education: {
     title: "Education",
     subtitle:
       "Formal academic background enhanced by a constant self-taught spirit.",
+    kicker: "FOUNDATIONS // ACADEMIC & CONTINUOUS",
     formal: {
       label: "Formal Education",
       degree: "Computer Engineer",
@@ -50,123 +297,41 @@ export const en = {
       distinction: "2 Distinction Votes",
       certDate: "Official certification: May 26, 2026",
       specialty: "Data Science Specialty",
+      specialtyDesc: "Data analysis, machine learning foundations & business intelligence.",
+      honorsTrack: "HONORS TRACK",
       certifications: "Academic certifications",
       certsList: [
-        'Business Intelligence',
-        'Software Architecture',
-        'IT Project Management',
-        'Software Quality',
-        'Data Model Analysis and Development',
-        'Software Programming',
-        'Requirements Analysis and Planning',
-        'Upper-Intermediate English (B1-B2)',
-      ]
+        "Business Intelligence",
+        "Software Architecture",
+        "IT Project Management",
+        "Software Quality",
+        "Data Model Analysis and Development",
+        "Software Programming",
+        "Requirements Analysis and Planning",
+        "Upper-Intermediate English (B1-B2)",
+      ],
     },
     selfTaught: {
       label: "Self-Taught",
       title: "Continuous Learning",
       description:
         "Beyond academia, I have proactively mastered modern web ecosystem technologies, building real projects from scratch.",
+      skillsExpanded: "EXPANDED SKILLSETS",
+      techList: [
+        "Modern Web Architecture",
+        "Reactive Frameworks (Vue/Nuxt)",
+        "FastAPI & Asynchronous Python",
+        "Cloud Infrastructure & CI/CD",
+        "Domain-Driven Design (DDD)",
+        "Data Engineering & Web Scraping",
+      ],
     },
-  },
-  skills: {
-    title: "Skills",
-    subtitle:
-      "A comprehensive technical stack built through real experience in professional and personal projects.",
-    learning: "(learning)",
-    categories: {
-      frontend: "Frontend",
-      backend: "Backend",
-      databases: "Databases",
-      devops: "DevOps & Cloud",
-      tools: "Tools",
-      soft: "Soft Skills",
-    },
-    softList: [
-      'Communication',
-      'Leadership',
-      'Teamwork',
-      'Self-Taught',
-      'English B1-B2',
-      'Honesty',
-      'Patience',
-    ],
-  },
-  experience: {
-    title: "Experience",
-    subtitle:
-      "A continuous technical growth from the first lines of code to comprehensive professional solutions.",
-    present: "Present",
-    inProgress: "In progress",
-    items: [
-      {
-        period: '2019',
-        title: 'Self-Taught Beginnings',
-        company: '',
-        description: 'At 18, I started exploring web development and programming on my own, building solid foundations in HTML, CSS, JavaScript, and Python through personal projects and online resources.',
-      },
-      {
-        period: '2021 – 2026',
-        title: 'Duoc UC — Computer Engineering',
-        company: 'Duoc UC Professional Institute · Viña del Mar',
-        description: 'Mastered modern frontend and backend frameworks. Specialized in Data Science with multiple academic certifications. Graduated on December 24, 2025, with 2 distinction votes.',
-      },
-      {
-        period: '2023 – 2026',
-        title: 'Mager.cl — Landing & CRM',
-        company: 'Mager Brokerage',
-        description: 'Developed a professional landing page and a custom CRM platform for the real estate brokerage Mager.cl. Comprehensive solution including client management, properties, and automated contact flows.',
-      },
-      {
-        period: '2025 – 2026',
-        title: 'Lanascurauma.cl — E-commerce',
-        company: 'Lanas Curauma',
-        description: 'Deployed a full e-commerce under the dropshipping model. Optimized with Netlify for CI/CD and Resend for automatic transactional notifications.',
-      },
-      {
-        period: '2025',
-        title: 'Gearlabs — Retail Scraper',
-        company: 'Gearlabs',
-        description: 'Created a robust and scalable retail scraper, ensuring code quality through Clean Architecture and Domain-Driven Design (DDD). Solution capable of processing large volumes of product data.',
-      },
-      {
-        period: '2026',
-        title: 'Yozh — Language Learning App',
-        company: '',
-        description: 'Development of an innovative web and mobile application designed to facilitate language learning interactively. A personal project that combines my technical skills with my passion for education and technology.',
-      }
-    ]
-  },
-  projects: {
-    title: "Projects",
-    subtitle:
-      "A selection of projects that reflect my technical trajectory and ability to create end-to-end solutions.",
-    viewProject: "View Project",
-    comingSoon: "",
-    noImage: "Image coming soon",
-    items: [
-      {
-        title: 'Mager.cl — CRM & Landing Page',
-        description: 'Custom CRM platform and professional landing page for the real estate brokerage Mager.cl. Includes client management, properties, and automated contact flows.',
-      },
-      {
-        title: 'Lanascurauma.cl — E-commerce',
-        description: 'Complete e-commerce under the dropshipping model with continuous deployment on Netlify and automatic transactional notifications with Resend.',
-      },
-      {
-        title: 'Gearlabs — Retail Scraper',
-        description: 'Scalable retail scraper built with Clean Architecture and DDD, capable of processing large volumes of product data robustly and maintainably.',
-      },
-      {
-        title: 'Yozh — Language Learning App',
-        description: 'Web and mobile application in development for interactive language learning. Combines gamification, writing practice, listening, and contextual vocabulary.',
-      }
-    ]
   },
   certificates: {
     title: "Certificates",
     subtitle:
-      "Degrees and certifications that support my technical training and commitment to continuous learning.",
+      "Credentials and certifications supporting my technical background and commitment to continuous learning.",
+    kicker: "CREDENTIALS // OFFICIAL CERTIFICATION",
     viewFull: "View full certificate",
     showMore: "Show more",
     showLess: "Show less",
@@ -175,62 +340,72 @@ export const en = {
     noImage: "Image coming soon",
     items: [
       {
-        title: 'Computer Engineer',
-        issuer: 'Duoc UC Professional Institute',
-        date: 'May 2026',
+        title: "Computer Engineer",
+        issuer: "Duoc UC Professional Institute",
+        date: "May 2026",
       },
       {
-        title: 'Data Science Specialty',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2025',
+        title: "Data Science Specialty",
+        issuer: "Duoc UC Professional Institute",
+        date: "2025",
       },
       {
-        title: 'Business Intelligence',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2024',
+        title: "Business Intelligence",
+        issuer: "Duoc UC Professional Institute",
+        date: "2024",
       },
       {
-        title: 'Software Architecture',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2024',
+        title: "Software Architecture",
+        issuer: "Duoc UC Professional Institute",
+        date: "2024",
       },
       {
-        title: 'IT Project Management',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2023',
+        title: "IT Project Management",
+        issuer: "Duoc UC Professional Institute",
+        date: "2023",
       },
       {
-        title: 'Software Quality',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2023',
+        title: "Software Quality",
+        issuer: "Duoc UC Professional Institute",
+        date: "2023",
       },
       {
-        title: 'Data Model Analysis and Development',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2023',
+        title: "Data Model Analysis and Development",
+        issuer: "Duoc UC Professional Institute",
+        date: "2023",
       },
       {
-        title: 'Software Programming',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2022',
+        title: "Software Programming",
+        issuer: "Duoc UC Professional Institute",
+        date: "2022",
       },
       {
-        title: 'Requirements Analysis and Planning',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2022',
+        title: "Requirements Analysis and Planning",
+        issuer: "Duoc UC Professional Institute",
+        date: "2022",
       },
       {
-        title: 'Upper-Intermediate English (B1-B2)',
-        issuer: 'Duoc UC Professional Institute',
-        date: '2024',
+        title: "Upper-Intermediate English (B1-B2)",
+        issuer: "Duoc UC Professional Institute",
+        date: "2024",
       },
-    ]
+    ],
   },
   contact: {
     title: "Contact",
     subtitle:
       "Have a project in mind or want to connect? Feel free to reach out.",
-    info: "Contact information",
+    kicker: "COMMS // DIRECT INTERFACE",
+    info: "Contact Information",
+    subtitleDetail:
+      "Connect directly via professional networks or drop a line through the form. Responses typically within 24 hours.",
+    statusReady: "READY",
+    secureTrans: "SECURE TRANSMISSION // RESEND API",
+    channelBadges: {
+      linkedin: "LINKEDIN // NETWORK",
+      github: "GITHUB // REPOSITORIES",
+      discord: "DISCORD // DIRECT",
+    },
     form: {
       title: "Send me a message",
       name: "Name",
@@ -242,7 +417,7 @@ export const en = {
       send: "Send Message",
       sending: "Sending...",
       success: "Message sent successfully!",
-      error: "Failed to send message.",
+      error: "Error sending message.",
       errors: {
         nameRequired: "Name is required",
         emailRequired: "Email is required",
@@ -250,8 +425,8 @@ export const en = {
         messageRequired: "Message is required",
         captchaRequired: "Please complete the captcha",
         rateLimit: "Too many requests. Please try again later.",
-        serverError: "Failed to send message. Please try again.",
-      }
+        serverError: "Error sending message. Please try again.",
+      },
     },
     links: {
       email: "Email",
@@ -261,4 +436,11 @@ export const en = {
       github: "GitHub",
     },
   },
-};
+  footer: {
+    role: "Duoc UC Computer Engineer · Full-Stack Specialist",
+    engineeredWith: "ENGINEERED WITH:",
+    engineDesc: "Canvas2D Galaxy Engine & 3D Spherical Math",
+    topOfSystem: "TOP OF SYSTEM",
+    copyright: "All systems operational. Built for high performance.",
+  },
+}
