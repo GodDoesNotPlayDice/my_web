@@ -301,7 +301,16 @@ function drawBadgeIcon(
   ctx.restore()
 }
 
+let isVisibleOnScreen = true
+let observer: IntersectionObserver | null = null
+let cachedGlowGrad: CanvasGradient | null = null
+
 function render() {
+  if (!isVisibleOnScreen) {
+    animId = null
+    return
+  }
+
   const canvas = canvasRef.value
   if (!canvas || cssWidth === 0 || cssHeight === 0) {
     animId = requestAnimationFrame(render)
@@ -340,43 +349,44 @@ function render() {
   // Constrain vertical tilt to prevent gimbal lock
   rotX = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, rotX))
 
-  // 1. Globe Ambient Aura / Outer Rim Glow
-  const glowGrad = ctx.createRadialGradient(cx, cy, globeRadius * 0.7, cx, cy, globeRadius * 1.15)
-  glowGrad.addColorStop(0, 'rgba(0, 217, 255, 0.05)')
-  glowGrad.addColorStop(0.5, 'rgba(167, 139, 250, 0.03)')
-  glowGrad.addColorStop(1, 'transparent')
-  ctx.fillStyle = glowGrad
+  // 1. Globe Ambient Aura / Outer Rim Glow (cached gradient)
+  if (!cachedGlowGrad) {
+    cachedGlowGrad = ctx.createRadialGradient(cx, cy, globeRadius * 0.7, cx, cy, globeRadius * 1.15)
+    cachedGlowGrad.addColorStop(0, 'rgba(0, 217, 255, 0.05)')
+    cachedGlowGrad.addColorStop(0.5, 'rgba(167, 139, 250, 0.03)')
+    cachedGlowGrad.addColorStop(1, 'transparent')
+  }
+  ctx.fillStyle = cachedGlowGrad
   ctx.beginPath()
   ctx.arc(cx, cy, globeRadius * 1.15, 0, Math.PI * 2)
   ctx.fill()
 
-  // 2. Globe Wireframe (latitude rings + longitude meridians)
+  // 2. Globe Wireframe (batched into a single draw call)
   ctx.save()
-  wireframeLines.forEach((line) => {
-    ctx.beginPath()
-    let first = true
+  ctx.strokeStyle = 'rgba(0, 217, 255, 0.08)'
+  ctx.lineWidth = 0.8
+  ctx.beginPath()
+  for (let l = 0; l < wireframeLines.length; l++) {
+    const line = wireframeLines[l]
     for (let i = 0; i < line.points.length; i++) {
       const pt = line.points[i]
       const { x, y } = rotatePoint(pt.phi, pt.theta, globeRadius, rotX, rotY)
       const sx = cx + x
       const sy = cy + y
-
-      if (first) {
+      if (i === 0) {
         ctx.moveTo(sx, sy)
-        first = false
       } else {
         ctx.lineTo(sx, sy)
       }
     }
-    ctx.strokeStyle = 'rgba(0, 217, 255, 0.08)'
-    ctx.lineWidth = 0.8
-    ctx.stroke()
-  })
+  }
+  ctx.stroke()
   ctx.restore()
 
   // 3. Project 3D nodes
   const sortedNodes: Node3D[] = []
-  nodes.forEach((node) => {
+  for (let n = 0; n < nodes.length; n++) {
+    const node = nodes[n]
     const { x, y, z } = rotatePoint(node.phi, node.theta, globeRadius * 1.05, rotX, rotY)
     node.projX = cx + x
     node.projY = cy + y
@@ -389,14 +399,18 @@ function render() {
     node.radius = (isMobile ? 20 : 24) * node.scale
 
     sortedNodes.push(node)
-  })
+  }
 
   // Painter's algorithm: sort back to front (smallest z to largest z)
   sortedNodes.sort((a, b) => a.projZ - b.projZ)
 
-  // 4. Draw Connecting constellations between nearby front nodes
+  // 4. Draw Connecting constellations (batched into single draw call with squared distance)
   ctx.save()
   const maxConnDist = isMobile ? 85 : 130
+  const maxConnDistSq = maxConnDist * maxConnDist
+  ctx.strokeStyle = 'rgba(0, 217, 255, 0.12)'
+  ctx.lineWidth = isMobile ? 0.7 : 1
+  ctx.beginPath()
   for (let i = 0; i < sortedNodes.length; i++) {
     const n1 = sortedNodes[i]
     if (n1.projZ < 0) continue
@@ -407,19 +421,13 @@ function render() {
 
       const dx = n1.projX - n2.projX
       const dy = n1.projY - n2.projY
-      const dist = Math.sqrt(dx * dx + dy * dy)
-
-      if (dist < maxConnDist) {
-        const lineAlpha = (1 - dist / maxConnDist) * 0.22 * ((n1.alpha + n2.alpha) / 2)
-        ctx.beginPath()
+      if (dx * dx + dy * dy < maxConnDistSq) {
         ctx.moveTo(n1.projX, n1.projY)
         ctx.lineTo(n2.projX, n2.projY)
-        ctx.strokeStyle = `rgba(0, 217, 255, ${lineAlpha})`
-        ctx.lineWidth = isMobile ? 0.7 : 1
-        ctx.stroke()
       }
     }
   }
+  ctx.stroke()
   ctx.restore()
 
   // 5. Draw Badges
@@ -456,6 +464,7 @@ function handleResize() {
   const rect = container.getBoundingClientRect()
   cssWidth = rect.width
   cssHeight = rect.height
+  cachedGlowGrad = null
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
   canvas.width = Math.round(cssWidth * dpr)
@@ -638,11 +647,27 @@ onMounted(() => {
   initIconCache()
   handleResize()
   window.addEventListener('resize', handleResize)
+
+  if (containerRef.value && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisibleOnScreen
+        isVisibleOnScreen = entry.isIntersecting
+        if (isVisibleOnScreen && !wasVisible && !animId) {
+          render()
+        }
+      },
+      { rootMargin: '120px' }
+    )
+    observer.observe(containerRef.value)
+  }
+
   render()
 })
 
 onBeforeUnmount(() => {
   if (animId) cancelAnimationFrame(animId)
+  if (observer) observer.disconnect()
   window.removeEventListener('resize', handleResize)
 })
 </script>

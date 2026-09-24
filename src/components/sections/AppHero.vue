@@ -31,14 +31,24 @@ const isFlipped = ref(false)
 const cardRotateX = ref(0)
 const cardRotateY = ref(0)
 
+let cachedCardRect: DOMRect | null = null
+
+function onCardMouseEnter() {
+  if (cardRef.value) {
+    cachedCardRect = cardRef.value.getBoundingClientRect()
+  }
+}
+
 function onCardMouseMove(e: MouseEvent) {
   if (!cardRef.value || window.innerWidth < 768) return
-  const rect = cardRef.value.getBoundingClientRect()
-  const x = e.clientX - rect.left
-  const y = e.clientY - rect.top
+  if (!cachedCardRect) {
+    cachedCardRect = cardRef.value.getBoundingClientRect()
+  }
+  const x = e.clientX - cachedCardRect.left
+  const y = e.clientY - cachedCardRect.top
 
-  const centerX = rect.width / 2
-  const centerY = rect.height / 2
+  const centerX = cachedCardRect.width / 2
+  const centerY = cachedCardRect.height / 2
 
   // Subtle 3D tilt: max 12 deg
   cardRotateY.value = ((x - centerX) / centerX) * 12
@@ -46,6 +56,7 @@ function onCardMouseMove(e: MouseEvent) {
 }
 
 function onCardMouseLeave() {
+  cachedCardRect = null
   cardRotateX.value = 0
   cardRotateY.value = 0
 }
@@ -297,6 +308,7 @@ onBeforeUnmount(() => {
       <div class="lg:col-span-5 flex flex-col items-center justify-center">
         <div
           ref="cardRef"
+          @mouseenter="onCardMouseEnter"
           @mousemove="onCardMouseMove"
           @mouseleave="onCardMouseLeave"
           @click="toggleFlip"
