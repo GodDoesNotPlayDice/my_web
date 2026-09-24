@@ -55,7 +55,7 @@ export const es = {
       "Seguimiento en tiempo real de flujo de trabajo en GitHub y resolución de estructuras de datos y algoritmos en LeetCode.",
     github: {
       title: "Actividad de GitHub",
-      handle: "@GodDoesNotPlayDice",
+      handle: "{'@'}GodDoesNotPlayDice",
       contributionsYear: "Contribuciones en el último año",
       totalCommits: "399+ commits",
       currentStreak: "Racha actual",
@@ -69,7 +69,7 @@ export const es = {
     },
     leetcode: {
       title: "Envíos en LeetCode",
-      handle: "@GodDoesNotPlayDice",
+      handle: "{'@'}GodDoesNotPlayDice",
       submissionsYear: "Envíos en el último año",
       totalSubmissions: "248+ envíos",
       activeDays: "Días activos",

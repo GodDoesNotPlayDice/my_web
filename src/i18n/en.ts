@@ -55,7 +55,7 @@ export const en = {
       "Real-time telemetry tracking GitHub workflow activity and algorithmic problem-solving on LeetCode.",
     github: {
       title: "GitHub Activity",
-      handle: "@GodDoesNotPlayDice",
+      handle: "{'@'}GodDoesNotPlayDice",
       contributionsYear: "Contributions in the last year",
       totalCommits: "399+ commits",
       currentStreak: "Current Streak",
@@ -69,7 +69,7 @@ export const en = {
     },
     leetcode: {
       title: "LeetCode Submissions",
-      handle: "@GodDoesNotPlayDice",
+      handle: "{'@'}GodDoesNotPlayDice",
       submissionsYear: "Submissions in the past one year",
       totalSubmissions: "248+ submissions",
       activeDays: "Active Days",
