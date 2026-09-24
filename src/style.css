@@ -1,6 +1,77 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-comfortaa: 'Comfortaa', cursive;
+  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+:root {
+  --bg: #050711;
+  --bg-card: rgba(10, 15, 29, 0.75);
+  --border: rgba(0, 217, 255, 0.15);
+  --border-muted: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --cyan: #00d9ff;
+  --purple: #a78bfa;
+}
+
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #04060e;
+  color: #f8fafc;
+  overflow-x: hidden;
+}
+
+/* Custom smooth dark scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #03050a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.6);
+}
+
+/* Neon glow utility */
+.cyan-glow {
+  text-shadow: 0 0 12px rgba(0, 217, 255, 0.6), 0 0 24px rgba(0, 217, 255, 0.3);
+}
+
+.purple-glow {
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.6), 0 0 24px rgba(167, 139, 250, 0.3);
+}
+
+/* Subtle holographic scanline */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
+}
+
+/* Smooth cinematic language transition */
+main {
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, filter;
+}
+
+html.lang-morphing main {
+  opacity: 0.65;
+  filter: blur(1.5px);
+  transition: opacity 0.12s ease-out, filter 0.12s ease-out;
 }
