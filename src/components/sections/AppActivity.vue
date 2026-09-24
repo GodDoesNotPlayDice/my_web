@@ -14,56 +14,23 @@ const hoveredDay = ref<ContributionDay | null>(null)
 const tooltipX = ref(0)
 const tooltipY = ref(0)
 
-// Pre-generate authentic 52-week baseline contribution data
-function generateBaselineContributions(): ContributionDay[] {
+// Generate a clean 365-day grid with zero mock data
+function generateEmpty365Days(): ContributionDay[] {
   const days: ContributionDay[] = []
   const today = new Date()
   const oneYearAgo = new Date(today)
   oneYearAgo.setDate(today.getDate() - 364)
 
-  // Pseudo-random but deterministic seed matching 399 contributions
-  let seed = 42
-  function pseudoRandom() {
-    seed = (seed * 9301 + 49297) % 233280
-    return seed / 233280
-  }
-
   for (let i = 0; i < 365; i++) {
     const d = new Date(oneYearAgo)
     d.setDate(oneYearAgo.getDate() + i)
     const dateStr = d.toISOString().split('T')[0]
-
-    const r = pseudoRandom()
-    let count = 0
-    let level = 0
-
-    const dayOfWeek = d.getDay()
-    // More active on weekdays
-    const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5
-    const threshold = isWeekday ? 0.35 : 0.60
-
-    if (r > threshold) {
-      if (r > 0.92) {
-        count = Math.floor(r * 10) + 4
-        level = 4
-      } else if (r > 0.80) {
-        count = Math.floor(r * 6) + 3
-        level = 3
-      } else if (r > 0.60) {
-        count = Math.floor(r * 4) + 1
-        level = 2
-      } else {
-        count = 1
-        level = 1
-      }
-    }
-
-    days.push({ date: dateStr, count, level })
+    days.push({ date: dateStr, count: 0, level: 0 })
   }
   return days
 }
 
-const rawContributions = ref<ContributionDay[]>(generateBaselineContributions())
+const rawContributions = ref<ContributionDay[]>(generateEmpty365Days())
 
 // Group 365 days into 52/53 columns (weeks of 7 days each)
 const weeks = computed(() => {
@@ -108,55 +75,7 @@ const hoveredLeetCodeDay = ref<ContributionDay | null>(null)
 const tooltipLeetCodeX = ref(0)
 const tooltipLeetCodeY = ref(0)
 
-// Generate authentic 52-week baseline LeetCode submission data
-function generateLeetCodeSubmissions(): ContributionDay[] {
-  const days: ContributionDay[] = []
-  const today = new Date()
-  const oneYearAgo = new Date(today)
-  oneYearAgo.setDate(today.getDate() - 364)
-
-  let seed = 1337
-  function pseudoRandom() {
-    seed = (seed * 9301 + 49297) % 233280
-    return seed / 233280
-  }
-
-  for (let i = 0; i < 365; i++) {
-    const d = new Date(oneYearAgo)
-    d.setDate(oneYearAgo.getDate() + i)
-    const dateStr = d.toISOString().split('T')[0]
-
-    const r = pseudoRandom()
-    let count = 0
-    let level = 0
-
-    // Practice patterns (concentration on weekends & mid-week sessions)
-    const dayOfWeek = d.getDay()
-    const isHeavyDay = dayOfWeek === 0 || dayOfWeek === 6 || dayOfWeek === 2 || dayOfWeek === 4
-    const threshold = isHeavyDay ? 0.44 : 0.66
-
-    if (r > threshold) {
-      if (r > 0.94) {
-        count = Math.floor(r * 5) + 4
-        level = 4
-      } else if (r > 0.82) {
-        count = Math.floor(r * 4) + 2
-        level = 3
-      } else if (r > 0.65) {
-        count = 2
-        level = 2
-      } else {
-        count = 1
-        level = 1
-      }
-    }
-
-    days.push({ date: dateStr, count, level })
-  }
-  return days
-}
-
-const rawLeetCodeSubmissions = ref<ContributionDay[]>(generateLeetCodeSubmissions())
+const rawLeetCodeSubmissions = ref<ContributionDay[]>(generateEmpty365Days())
 
 const leetcodeWeeks = computed(() => {
   const result: ContributionDay[][] = []
@@ -188,42 +107,44 @@ async function fetchLiveLeetCodeSubmissions() {
       const data = await res.json()
       let calendar: Record<string, number> = {}
       if (typeof data.submissionCalendar === 'string') {
-        calendar = JSON.parse(data.submissionCalendar || '{}')
+        try {
+          calendar = JSON.parse(data.submissionCalendar || '{}')
+        } catch {
+          calendar = {}
+        }
       } else if (data.submissionCalendar && typeof data.submissionCalendar === 'object') {
         calendar = data.submissionCalendar
       }
 
+      const countByDate = new Map<string, number>()
       const timestamps = Object.keys(calendar)
-      if (timestamps.length > 0) {
-        const countByDate = new Map<string, number>()
-        timestamps.forEach((ts) => {
-          const d = new Date(parseInt(ts) * 1000)
-          const dateStr = d.toISOString().split('T')[0]
-          countByDate.set(dateStr, calendar[ts])
-        })
+      timestamps.forEach((ts) => {
+        const d = new Date(parseInt(ts) * 1000)
+        const dateStr = d.toISOString().split('T')[0]
+        countByDate.set(dateStr, calendar[ts])
+      })
 
-        const today = new Date()
-        const oneYearAgo = new Date(today)
-        oneYearAgo.setDate(today.getDate() - 364)
-        const realDays: ContributionDay[] = []
+      const today = new Date()
+      const oneYearAgo = new Date(today)
+      oneYearAgo.setDate(today.getDate() - 364)
+      const realDays: ContributionDay[] = []
 
-        for (let i = 0; i < 365; i++) {
-          const d = new Date(oneYearAgo)
-          d.setDate(oneYearAgo.getDate() + i)
-          const dateStr = d.toISOString().split('T')[0]
-          const count = countByDate.get(dateStr) || 0
-          let level = 0
-          if (count >= 6) level = 4
-          else if (count >= 4) level = 3
-          else if (count >= 2) level = 2
-          else if (count >= 1) level = 1
-          realDays.push({ date: dateStr, count, level })
-        }
-        rawLeetCodeSubmissions.value = realDays
+      for (let i = 0; i < 365; i++) {
+        const d = new Date(oneYearAgo)
+        d.setDate(oneYearAgo.getDate() + i)
+        const dateStr = d.toISOString().split('T')[0]
+        const count = countByDate.get(dateStr) || 0
+        let level = 0
+        if (count >= 6) level = 4
+        else if (count >= 4) level = 3
+        else if (count >= 2) level = 2
+        else if (count >= 1) level = 1
+        realDays.push({ date: dateStr, count, level })
       }
+      rawLeetCodeSubmissions.value = realDays
     }
   } catch {
-    // Retain baseline data without failing
+    // Retain clean empty grid
   }
 }
 
