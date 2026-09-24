@@ -340,12 +340,20 @@ onBeforeUnmount(() => {
               class="absolute inset-0 rounded-2xl overflow-hidden border border-cyan-500/25 bg-[#060b18] shadow-[0_0_50px_rgba(0,217,255,0.1),0_30px_70px_rgba(0,0,0,0.7)]"
               style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
             >
-              <!-- Image -->
-              <img
-                src="/me2.jpg"
-                alt="Vicente Vasquez"
-                class="absolute inset-0 w-full h-full object-cover object-center filter saturate-110 contrast-105"
-              />
+              <!-- Image with modern WebP + async decoding -->
+              <picture class="absolute inset-0 w-full h-full">
+                <source srcset="/me2.webp" type="image/webp" />
+                <img
+                  src="/me2.jpg"
+                  alt="Vicente Vasquez"
+                  width="370"
+                  height="510"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                  class="w-full h-full object-cover object-center filter saturate-110 contrast-105"
+                />
+              </picture>
 
               <!-- Cyber overlay gradient -->
               <div class="absolute inset-0 bg-gradient-to-t from-[#050814] via-transparent to-[#050814]/40 opacity-80" />
