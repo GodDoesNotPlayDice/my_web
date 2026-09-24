@@ -1,124 +1,193 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import Globe3D, { type TechItem } from '../fx/Globe3D.vue'
 
 const { t, tm } = useI18n()
 
+const activeCategory = ref<string>('all')
+const selectedTechInfo = ref<TechItem | null>(null)
+
+function onSelectTech(tech: TechItem | null) {
+  selectedTechInfo.value = tech
+}
+
+const filterTabs = [
+  { id: 'all' },
+  { id: 'frontend' },
+  { id: 'backend' },
+  { id: 'database' },
+  { id: 'devops' },
+  { id: 'architecture' },
+]
+
 interface SkillCategory {
   key: string
-  icon: string
   color: string
   skills: string[]
 }
 
-import { computed } from 'vue'
-
 const categories = computed<SkillCategory[]>(() => [
   {
     key: 'frontend',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>`,
-    color: 'teal',
-    skills: ['TypeScript', 'Vue.js', 'Tailwind'],
+    color: 'cyan',
+    skills: ['Vue.js 3', 'TypeScript', 'Nuxt 3', 'Tailwind CSS', 'JavaScript (ES6+)', 'GSAP Motion', 'HTML5 & Responsive CSS'],
   },
   {
     key: 'backend',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>`,
     color: 'indigo',
-    skills: ['Python', 'FastAPI', 'Django (BFF)', 'JavaScript', 'REST APIs', 'Nuxt'],
+    skills: ['Python', 'FastAPI', 'Django (BFF)', 'REST APIs', 'Node.js', 'Batch Processing', 'Kappa Architecture'],
   },
   {
     key: 'databases',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>`,
-    color: 'orange',
-    skills: ['Supabase', 'MongoDB', 'MySQL'],
+    color: 'amber',
+    skills: ['Supabase (PostgreSQL)', 'PostgreSQL', 'MongoDB', 'MySQL', 'Data Modeling', 'ORMs & Query Tuning'],
   },
   {
     key: 'devops',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>`,
-    color: 'teal',
-    skills: ['Linux (nativo)', 'GCP', 'Netlify', 'Arquitectura Batch', 'Arquitectura Kappa'],
+    color: 'emerald',
+    skills: ['Linux (Native Env)', 'Docker', 'Google Cloud (GCP)', 'Netlify CI/CD', 'Git / GitHub Actions', 'Resend API'],
   },
   {
     key: 'tools',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
-    color: 'indigo',
-    skills: ['Git', 'Playwright', 'Web Scraping', 'Clean Architecture', 'DDD'],
+    color: 'purple',
+    skills: ['Clean Architecture', 'DDD (Domain-Driven Design)', 'Playwright Automation', 'Web Scraping', 'Unit & E2E Testing'],
   },
   {
     key: 'soft',
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
-    color: 'teal',
-    skills: tm('skills.softList') as string[],
+    color: 'cyan',
+    skills: (tm('skills.softList') as string[]) || ['Comunicación', 'Liderazgo', 'Trabajo en Equipo', 'Autodidacta', 'Inglés B1-B2'],
   },
 ])
 
-const colorMap: Record<string, { card: string; badge: string; chip: string }> = {
-  teal: {
-    card: 'border-teal-200 dark:border-teal-900/40 hover:border-teal-400 dark:hover:border-teal-700',
-    badge: 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
-    chip: 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800',
+const accentStyles: Record<string, { border: string; glow: string; badge: string; dot: string }> = {
+  cyan: {
+    border: 'border-cyan-500/25 hover:border-cyan-400/60',
+    glow: 'hover:shadow-[0_0_24px_rgba(0,217,255,0.12)]',
+    badge: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30',
+    dot: 'bg-cyan-400 shadow-[0_0_8px_#00d9ff]',
   },
   indigo: {
-    card: 'border-indigo-200 dark:border-indigo-900/40 hover:border-indigo-400 dark:hover:border-indigo-700',
-    badge: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
-    chip: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
+    border: 'border-indigo-500/25 hover:border-indigo-400/60',
+    glow: 'hover:shadow-[0_0_24px_rgba(99,102,241,0.12)]',
+    badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30',
+    dot: 'bg-indigo-400 shadow-[0_0_8px_#818cf8]',
   },
-  orange: {
-    card: 'border-orange-200 dark:border-orange-900/40 hover:border-orange-400 dark:hover:border-orange-700',
-    badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-    chip: 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+  amber: {
+    border: 'border-amber-500/25 hover:border-amber-400/60',
+    glow: 'hover:shadow-[0_0_24px_rgba(245,158,11,0.12)]',
+    badge: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+    dot: 'bg-amber-400 shadow-[0_0_8px_#f59e0b]',
+  },
+  emerald: {
+    border: 'border-emerald-500/25 hover:border-emerald-400/60',
+    glow: 'hover:shadow-[0_0_24px_rgba(16,185,129,0.12)]',
+    badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+    dot: 'bg-emerald-400 shadow-[0_0_8px_#10b981]',
+  },
+  purple: {
+    border: 'border-purple-500/25 hover:border-purple-400/60',
+    glow: 'hover:shadow-[0_0_24px_rgba(168,85,247,0.12)]',
+    badge: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+    dot: 'bg-purple-400 shadow-[0_0_8px_#c084fc]',
   },
 }
 </script>
 
 <template>
-  <section id="skills" class="py-16 md:py-24 bg-white dark:bg-[#0b0f19] transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-5 md:px-8 skills-content">
+  <section id="skills" class="py-24 md:py-32 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 relative z-10 skills-content">
 
-      <!-- Header -->
-      <div class="mb-10 md:mb-16">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-colors">
+      <!-- Section Header with Cyber Monospace Kicker -->
+      <div class="text-center mb-10 md:mb-14">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">
+          {{ t('skills.kicker') }}
+        </div>
+
+        <h2
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"
+          style="font-family: 'Comfortaa', cursive;"
+        >
           {{ t('skills.title') }}
         </h2>
-        <div class="w-12 h-1 bg-[#20b2aa] mt-3 mb-4 md:mb-6"></div>
-        <p class="text-slate-600 dark:text-gray-400 max-w-2xl transition-colors text-sm md:text-base">
+
+        <div class="w-16 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto mt-4 mb-4 rounded-full" />
+
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
           {{ t('skills.subtitle') }}
         </p>
       </div>
 
-      <!-- Categories grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <!-- 3D Interactive Tech Globe Container -->
+      <div
+        class="relative w-full rounded-2xl sm:rounded-3xl bg-[#070b18]/70 border border-cyan-500/20 backdrop-blur-xl shadow-[0_0_60px_rgba(0,217,255,0.06),inset_0_1px_0_rgba(255,255,255,0.1)] p-1 sm:p-6 mb-12 overflow-hidden"
+      >
+        <!-- Category Filter Pills on top of Globe -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-2 pb-3 px-1 sm:px-2 z-20 relative">
+          <button
+            v-for="tab in filterTabs"
+            :key="tab.id"
+            @click="activeCategory = tab.id"
+            class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-mono font-medium transition-all duration-200 border"
+            :class="activeCategory === tab.id
+              ? 'bg-cyan-500/15 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,217,255,0.25)]'
+              : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-cyan-500/30'"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full"
+              :class="activeCategory === tab.id ? 'bg-cyan-400 shadow-[0_0_6px_#00d9ff]' : 'bg-slate-600'"
+            />
+            <span>{{ t('skills.filterTabs.' + tab.id) }}</span>
+          </button>
+        </div>
+
+        <!-- 3D Globe Component -->
+        <Globe3D
+          :selected-category="activeCategory"
+          @select-tech="onSelectTech"
+        />
+      </div>
+
+      <!-- Categorized Tech Stack Grid (Without skill counts) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div
           v-for="cat in categories"
           :key="cat.key"
-          class="bg-white dark:bg-[#13131f] rounded-xl border p-6 transition-all duration-300 skill-card"
-          :class="colorMap[cat.color].card"
+          class="group rounded-2xl bg-[#090f1e]/80 backdrop-blur-md border p-6 transition-all duration-300 flex flex-col justify-between"
+          :class="[accentStyles[cat.color].border, accentStyles[cat.color].glow]"
         >
-          <!-- Category header -->
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-              :class="colorMap[cat.color].badge"
-            >
-              <span class="w-5 h-5" v-html="cat.icon"></span>
+          <div>
+            <!-- Category Header -->
+            <div class="flex items-center gap-2.5 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full" :class="accentStyles[cat.color].dot" />
+              <h3 class="font-mono font-bold text-base sm:text-lg text-white uppercase tracking-wider">
+                {{ t(`skills.categories.${cat.key}`) }}
+              </h3>
             </div>
-            <h3 class="font-bold text-slate-900 dark:text-white">
-              {{ t(`skills.categories.${cat.key}`) }}
-            </h3>
+
+            <!-- Description -->
+            <p class="text-xs text-slate-400 leading-relaxed mb-5 font-sans">
+              {{ t(`skills.categoryDescriptions.${cat.key}`) }}
+            </p>
           </div>
 
-          <!-- Skill chips -->
-          <div class="flex flex-wrap gap-2">
+          <!-- Skills Badges Array -->
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-white/[0.06]">
             <span
               v-for="skill in cat.skills"
               :key="skill"
-              class="text-xs px-2.5 py-1.5 rounded-md border font-medium"
-              :class="colorMap[cat.color].chip"
+              class="text-xs font-mono px-2.5 py-1 rounded-lg border transition-all duration-200 cursor-default"
+              :class="[
+                accentStyles[cat.color].badge,
+                'hover:scale-105 hover:bg-white/10 hover:text-white',
+              ]"
             >
               {{ skill }}
             </span>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 </template>
