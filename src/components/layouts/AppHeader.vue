@@ -1,39 +1,202 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
-import AppThemeSwitch from "../ui/AppThemeSwitch.vue";
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const { t, locale } = useI18n();
+const { t, locale } = useI18n()
 
-const isDark = ref(document.documentElement.classList.contains('dark'));
-const mobileMenuOpen = ref(false);
-
-function toggleTheme(value: boolean) {
-  isDark.value = value;
-  document.documentElement.classList.toggle('dark', value);
-}
+const mobileMenuOpen = ref(false)
+const activeSection = ref('hero')
+const isScrolled = ref(false)
+const isLanguageTransitioning = ref(false)
 
 function scrollToSection(id: string) {
-  mobileMenuOpen.value = false;
-  setTimeout(() => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  }, 200);
+  mobileMenuOpen.value = false
+  activeSection.value = id
+  const target = document.getElementById(id)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' })
+  }
 }
 
+// Consistent order matching the page DOM layout
 const navigationLinks = computed(() => [
-  { id: 1, name: t("nav.home"),         hash: "hero" },
-  { id: 2, name: t("nav.about"),        hash: "about" },
-  { id: 3, name: t("nav.education"),    hash: "education" },
-  { id: 4, name: t("nav.skills"),       hash: "skills" },
-  { id: 5, name: t("nav.experience"),   hash: "experience" },
-  { id: 6, name: t("nav.projects"),     hash: "projects" },
-  { id: 7, name: t("nav.certificates"), hash: "certificates" },
-  { id: 8, name: t("nav.contact"),      hash: "contact" },
-]);
+  { id: 1, name: t('nav.home'), hash: 'hero' },
+  { id: 2, name: t('nav.about'), hash: 'about' },
+  { id: 3, name: t('nav.skills'), hash: 'skills' },
+  { id: 4, name: t('nav.experience'), hash: 'experience' },
+  { id: 5, name: t('nav.projects'), hash: 'projects' },
+  { id: 6, name: t('nav.education'), hash: 'education' },
+  { id: 7, name: t('nav.certificates'), hash: 'certificates' },
+])
+
+// Invariant fixed widths per section link: guarantees 0.00px layout shift between ES and EN
+const linkWidthMap: Record<string, string> = {
+  hero: 'w-[78px]',
+  about: 'w-[94px]',
+  skills: 'w-[122px]',
+  experience: 'w-[122px]',
+  projects: 'w-[104px]',
+  education: 'w-[104px]',
+  certificates: 'w-[130px]',
+}
+
+function setLocale(newLocale: 'es' | 'en') {
+  if (locale.value === newLocale || isLanguageTransitioning.value) return
+  isLanguageTransitioning.value = true
+
+  // Trigger gentle cinematic morphing transition
+  document.documentElement.classList.add('lang-morphing')
+
+  setTimeout(() => {
+    locale.value = newLocale
+    setTimeout(() => {
+      document.documentElement.classList.remove('lang-morphing')
+      isLanguageTransitioning.value = false
+    }, 200)
+  }, 120)
+}
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 30
+
+  // Detect active section in reverse DOM order
+  const sections = ['contact', 'certificates', 'education', 'projects', 'experience', 'skills', 'about', 'hero']
+  const scrollPos = window.scrollY + 220
+
+  for (const s of sections) {
+    const el = document.getElementById(s)
+    if (el) {
+      const top = el.offsetTop
+      if (scrollPos >= top) {
+        activeSection.value = s
+        break
+      }
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  handleScroll()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
-  <!-- Sidebar overlay backdrop -->
+  <!-- Floating Glass Island Control Dock (Zero Layout Shift) -->
+  <header
+    class="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-auto max-w-6xl transition-all duration-300"
+  >
+    <nav
+      class="w-full flex items-center justify-between lg:justify-center gap-2 sm:gap-3 rounded-2xl px-4 sm:px-5 lg:px-4 py-2 transition-all duration-300"
+      :style="{
+        background: isScrolled ? 'rgba(7, 11, 22, 0.90)' : 'rgba(9, 14, 28, 0.80)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: '1px solid rgba(0, 217, 255, 0.18)',
+        boxShadow: isScrolled
+          ? '0 12px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 217, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
+          : '0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 217, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+      }"
+    >
+      <!-- Mobile Brand Logo on Left (Only visible on < lg screens) -->
+      <a
+        href="#hero"
+        @click.prevent="scrollToSection('hero')"
+        class="lg:hidden text-sm sm:text-base font-bold tracking-tight text-white select-none shrink-0 hover:opacity-85 transition-opacity"
+        style="font-family: 'Comfortaa', cursive;"
+      >
+        vicente<span class="text-cyan-400">.dev</span>
+      </a>
+
+      <!-- Desktop Navigation Links with Fixed Invariant Widths -->
+      <div class="hidden lg:flex items-center gap-1">
+        <a
+          v-for="link in navigationLinks"
+          :key="link.id"
+          :href="`#${link.hash}`"
+          @click.prevent="scrollToSection(link.hash)"
+          class="relative h-9 flex items-center justify-center text-xs font-mono tracking-wider uppercase transition-all duration-200 rounded-xl group select-none overflow-hidden"
+          :class="[
+            linkWidthMap[link.hash],
+            activeSection === link.hash
+              ? 'text-cyan-400 font-bold bg-cyan-500/15 shadow-[0_0_12px_rgba(0,217,255,0.2)]'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.06]',
+          ]"
+        >
+          <!-- Smooth crossfade between translations -->
+          <Transition mode="out-in" name="nav-crossfade">
+            <span :key="locale" class="truncate">{{ link.name }}</span>
+          </Transition>
+
+          <span
+            v-if="activeSection === link.hash"
+            class="absolute bottom-1 left-3 right-3 h-[2px] rounded-full bg-cyan-400 shadow-[0_0_8px_#00d9ff]"
+          />
+        </a>
+      </div>
+
+      <!-- Subtle Divider between Nav Links and Controls (Desktop only) -->
+      <div class="h-5 w-px bg-white/10 hidden lg:block mx-1" />
+
+      <!-- Right Controls Group (Language Switcher + Mobile Menu Toggle) -->
+      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <!-- Smooth Sliding Language Switcher (Zero Layout Shift) -->
+        <div
+          class="relative flex items-center p-1 rounded-xl bg-black/50 border border-white/10 w-[84px] h-[36px] select-none shrink-0"
+          role="group"
+          aria-label="Language selector"
+        >
+          <!-- Sliding Indicator Pill -->
+          <div
+            class="absolute top-1 bottom-1 w-[36px] rounded-lg bg-cyan-500/25 border border-cyan-400/50 shadow-[0_0_12px_rgba(0,217,255,0.35)] transition-transform duration-300 ease-out pointer-events-none"
+            :style="{
+              transform: locale === 'es' ? 'translateX(0px)' : 'translateX(40px)',
+            }"
+          />
+
+          <!-- ES Button -->
+          <button
+            @click="setLocale('es')"
+            type="button"
+            class="relative z-10 w-[36px] h-full flex items-center justify-center text-xs font-mono font-bold transition-colors duration-200"
+            :class="locale === 'es' ? 'text-cyan-300' : 'text-slate-400 hover:text-white'"
+          >
+            ES
+          </button>
+
+          <!-- EN Button -->
+          <button
+            @click="setLocale('en')"
+            type="button"
+            class="relative z-10 w-[36px] h-full flex items-center justify-center text-xs font-mono font-bold transition-colors duration-200"
+            :class="locale === 'en' ? 'text-cyan-300' : 'text-slate-400 hover:text-white'"
+          >
+            EN
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button (Visible on < lg) -->
+        <button
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-white/[0.04] border border-white/10 transition-colors shrink-0"
+          aria-label="Toggle Menu"
+        >
+          <svg v-if="!mobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg v-else class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Drawer / Overlay Backdrop -->
   <Transition
     enter-active-class="transition-opacity duration-300"
     enter-from-class="opacity-0"
@@ -44,12 +207,12 @@ const navigationLinks = computed(() => [
   >
     <div
       v-if="mobileMenuOpen"
-      class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+      class="fixed inset-0 z-[1001] bg-black/70 backdrop-blur-md lg:hidden"
       @click="mobileMenuOpen = false"
     />
   </Transition>
 
-  <!-- Sidebar drawer -->
+  <!-- Mobile Drawer Slide -->
   <Transition
     enter-active-class="transition-transform duration-300 ease-out"
     enter-from-class="translate-x-full"
@@ -60,120 +223,66 @@ const navigationLinks = computed(() => [
   >
     <aside
       v-if="mobileMenuOpen"
-      class="fixed top-0 right-0 h-full w-72 z-50 md:hidden flex flex-col dark:bg-[#0d1117] bg-white shadow-2xl"
+      class="fixed top-0 right-0 h-full w-72 z-[1002] lg:hidden flex flex-col bg-[#070b16]/95 backdrop-blur-2xl border-l border-cyan-500/20 shadow-[-20px_0_60px_rgba(0,0,0,0.8)]"
     >
-      <!-- Sidebar header -->
-      <div class="flex items-center justify-between px-5 py-5 border-b border-slate-100 dark:border-gray-800">
-        <span class="text-lg font-extrabold bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text">
-          V.V
-        </span>
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00d9ff]" />
+          <span
+            class="text-sm font-bold tracking-tight text-white select-none"
+            style="font-family: 'Comfortaa', cursive;"
+          >
+            vicente<span class="text-cyan-400">.dev</span>
+          </span>
+        </div>
         <button
           @click="mobileMenuOpen = false"
-          class="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors"
-          aria-label="Cerrar menú"
+          class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      <!-- Nav links -->
+      <!-- Drawer Nav List -->
       <nav class="flex-1 overflow-y-auto px-4 py-5">
-        <ul class="flex flex-col gap-1">
+        <ul class="flex flex-col gap-1.5">
           <li v-for="link in navigationLinks" :key="link.id">
             <a
               :href="`#${link.hash}`"
               @click.prevent="scrollToSection(link.hash)"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all duration-200 group"
+              class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-mono tracking-wider transition-all duration-200"
+              :class="activeSection === link.hash
+                ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'"
             >
-              <span class="w-1.5 h-1.5 rounded-full bg-teal-400/50 group-hover:bg-teal-500 transition-colors flex-shrink-0"></span>
-              {{ link.name }}
-              <svg class="w-3.5 h-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              <span>{{ link.name }}</span>
+              <svg class="w-3.5 h-3.5 text-cyan-400 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>
           </li>
         </ul>
       </nav>
-
-      <!-- Sidebar footer: lang + contact -->
-      <div class="px-5 py-5 border-t border-slate-100 dark:border-gray-800 flex flex-col gap-3">
-        <select
-          v-model="locale"
-          class="w-full bg-slate-50 dark:bg-[#13131f] text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 outline-none focus:border-teal-500 cursor-pointer text-sm transition-colors"
-        >
-          <option value="es" class="text-black">🌐 Español</option>
-          <option value="en" class="text-black">🌐 English</option>
-        </select>
-        <button
-          @click="scrollToSection('contact')"
-          class="w-full bg-[#20b2aa] hover:bg-teal-500 text-white py-2.5 rounded-xl font-medium text-sm transition-colors"
-        >
-          {{ t("buttons.contact") }}
-        </button>
-      </div>
     </aside>
   </Transition>
-
-  <!-- ─── Sticky header ────────────────────────────────────────────── -->
-  <header class="sticky top-0 z-30 dark:bg-[#0b0f19]/95 bg-white/95 backdrop-blur-sm border-b border-slate-100 dark:border-gray-900 transition-colors duration-300">
-    <div class="flex items-center gap-6 px-5 md:px-8 py-4">
-
-      <!-- Logo -->
-      <h2 class="text-xl md:text-2xl font-extrabold bg-linear-to-r from-teal-400 via-indigo-500 to-orange-300 text-transparent bg-clip-text hover:scale-105 transition-transform duration-300 cursor-pointer flex-shrink-0">
-        <a @click.prevent="scrollToSection('hero')" href="#hero">V.V</a>
-      </h2>
-
-      <!-- Desktop nav — left, beside logo -->
-      <nav class="hidden lg:block">
-        <ul class="flex gap-5 text-[14px]">
-          <li v-for="link in navigationLinks" :key="link.id">
-            <a
-              :href="`#${link.hash}`"
-              @click.prevent="scrollToSection(link.hash)"
-              class="relative pb-1 dark:text-gray-300 text-gray-600 hover:text-teal-500 dark:hover:text-teal-400 transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-teal-500 dark:after:bg-teal-400 after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300 after:ease-out"
-            >
-              {{ link.name }}
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <!-- Spacer: pushes controls to the right -->
-      <div class="flex-1"></div>
-
-      <!-- Desktop controls -->
-      <div class="hidden md:flex items-center gap-3 flex-shrink-0">
-        <select
-          v-model="locale"
-          class="bg-transparent text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 outline-none focus:border-teal-500 cursor-pointer text-sm transition-colors"
-        >
-          <option value="es" class="text-black">ES</option>
-          <option value="en" class="text-black">EN</option>
-        </select>
-        <AppThemeSwitch :model-value="isDark" @update:model-value="toggleTheme" />
-        <button
-          @click="scrollToSection('contact')"
-          class="hidden lg:block bg-[#20b2aa] hover:bg-teal-500 text-white px-4 py-2 rounded font-medium text-sm transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5"
-        >
-          {{ t("buttons.contact") }}
-        </button>
-      </div>
-
-      <!-- Mobile right: theme + burger -->
-      <div class="flex md:hidden items-center gap-3 flex-shrink-0">
-        <AppThemeSwitch :model-value="isDark" @update:model-value="toggleTheme" />
-        <button
-          @click="mobileMenuOpen = true"
-          class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors"
-          aria-label="Abrir menú"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </header>
 </template>
+
+<style scoped>
+.nav-crossfade-enter-active,
+.nav-crossfade-leave-active {
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-crossfade-enter-from {
+  opacity: 0;
+  transform: translateY(3px) scale(0.96);
+}
+
+.nav-crossfade-leave-to {
+  opacity: 0;
+  transform: translateY(-3px) scale(0.96);
+}
+</style>
