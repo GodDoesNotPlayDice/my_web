@@ -9,105 +9,112 @@ export interface Project {
   description: string
   tags: string[]
   url?: string
-  icon?: string        // SVG string (opcional, usa uno genérico si no se pasa)
-  accent?: 'teal' | 'indigo' | 'orange'
+  accent?: 'teal' | 'indigo' | 'orange' | 'cyan' | 'purple'
+  architectureHighlight?: string
 }
 
 const props = defineProps<{ project: Project }>()
 
-const accent = props.project.accent ?? 'teal'
-
-const accentStyles = {
+const accentMap: Record<string, { bar: string; border: string; glow: string; link: string }> = {
   teal: {
-    bar:    'bg-gradient-to-r from-teal-400 to-teal-600',
-    icon:   'bg-teal-500/10 text-teal-500 dark:text-teal-400 group-hover:bg-teal-500 group-hover:text-white',
-    tag:    'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800',
-    link:   'text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300',
-    glow:   'group-hover:shadow-teal-500/10',
-    border: 'group-hover:border-teal-300 dark:group-hover:border-teal-800',
+    bar: 'from-cyan-400 to-teal-500',
+    border: 'hover:border-cyan-400/60',
+    glow: 'hover:shadow-[0_0_30px_rgba(0,217,255,0.15)]',
+    link: 'text-cyan-400 hover:text-cyan-300',
+  },
+  cyan: {
+    bar: 'from-cyan-400 to-blue-500',
+    border: 'hover:border-cyan-400/60',
+    glow: 'hover:shadow-[0_0_30px_rgba(0,217,255,0.15)]',
+    link: 'text-cyan-400 hover:text-cyan-300',
   },
   indigo: {
-    bar:    'bg-gradient-to-r from-indigo-400 to-indigo-600',
-    icon:   'bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white',
-    tag:    'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
-    link:   'text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300',
-    glow:   'group-hover:shadow-indigo-500/10',
-    border: 'group-hover:border-indigo-300 dark:group-hover:border-indigo-800',
+    bar: 'from-indigo-400 to-purple-500',
+    border: 'hover:border-indigo-400/60',
+    glow: 'hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]',
+    link: 'text-indigo-400 hover:text-indigo-300',
+  },
+  purple: {
+    bar: 'from-purple-400 to-pink-500',
+    border: 'hover:border-purple-400/60',
+    glow: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]',
+    link: 'text-purple-400 hover:text-purple-300',
   },
   orange: {
-    bar:    'bg-gradient-to-r from-orange-400 to-orange-500',
-    icon:   'bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white',
-    tag:    'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
-    link:   'text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300',
-    glow:   'group-hover:shadow-orange-500/10',
-    border: 'group-hover:border-orange-300 dark:group-hover:border-orange-800',
+    bar: 'from-amber-400 to-orange-500',
+    border: 'hover:border-amber-400/60',
+    glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.15)]',
+    link: 'text-amber-400 hover:text-amber-300',
   },
 }
 
-const s = accentStyles[accent]
-
-const defaultIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`
+const currentAccent = accentMap[props.project.accent ?? 'teal'] || accentMap.teal
 </script>
 
 <template>
   <article
-    class="group relative bg-white dark:bg-[#13131f] rounded-xl border border-slate-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
-    :class="[s.glow, s.border]"
+    class="group relative rounded-2xl bg-[#090f1f]/80 backdrop-blur-xl border border-white/10 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+    :class="[currentAccent.border, currentAccent.glow]"
   >
-    <!-- Top accent bar -->
-    <div class="h-1 w-full" :class="s.bar"></div>
+    <!-- Top Glowing Accent Bar -->
+    <div class="h-1 w-full bg-gradient-to-r" :class="currentAccent.bar" />
 
-    <!-- Card body -->
-    <div class="p-6 flex flex-col flex-1">
-      <!-- Icon + title row -->
-      <div class="flex items-start gap-4 mb-4">
-        <div
-          class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
-          :class="s.icon"
-        >
-          <span class="w-6 h-6" v-html="project.icon ?? defaultIcon"></span>
-        </div>
-        <div class="min-w-0 pt-0.5">
-          <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug transition-colors">
-            {{ project.title }}
-          </h3>
-        </div>
+    <!-- Corner Crosshairs/Brackets -->
+    <div class="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-white/20 group-hover:border-cyan-400/60 transition-colors" />
+    <div class="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-white/20 group-hover:border-cyan-400/60 transition-colors" />
+
+    <!-- Card Content -->
+    <div class="p-6 sm:p-7 flex flex-col flex-1">
+      <!-- Title -->
+      <h3 class="text-xl font-bold font-mono text-white mb-3 group-hover:text-cyan-300 transition-colors">
+        {{ project.title }}
+      </h3>
+
+      <!-- Architecture Highlight Callout without emoji or 'arch' -->
+      <div
+        v-if="project.architectureHighlight"
+        class="mb-4 px-3.5 py-2 rounded-xl bg-cyan-500/[0.06] border border-cyan-500/20 text-xs font-mono text-cyan-300 leading-relaxed"
+      >
+        {{ project.architectureHighlight }}
       </div>
 
       <!-- Description -->
-      <p class="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
+      <p class="text-sm text-slate-300 leading-relaxed mb-6 flex-1 font-sans">
         {{ project.description }}
       </p>
 
-      <!-- Tags -->
-      <div class="flex flex-wrap gap-1.5 mb-5">
+      <!-- Tech Tags -->
+      <div class="flex flex-wrap gap-1.5 mb-6">
         <span
           v-for="tag in project.tags"
           :key="tag"
-          class="text-xs px-2 py-0.5 rounded border font-medium"
-          :class="s.tag"
+          class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/10 text-slate-300 group-hover:border-white/20 transition-colors"
         >
           {{ tag }}
         </span>
       </div>
 
-      <!-- Link -->
-      <div class="border-t border-slate-100 dark:border-gray-800 pt-4 mt-auto">
+      <!-- Link Footer -->
+      <div class="pt-4 border-t border-white/10 mt-auto flex items-center justify-between">
         <a
           v-if="project.url && project.url !== '#'"
           :href="project.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-          :class="s.link"
+          class="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider transition-colors"
+          :class="currentAccent.link"
         >
-          {{ t('projects.viewProject') }}
-          <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          <span>{{ t('projects.viewProject') }}</span>
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
-        <span v-else class="text-xs text-slate-400 dark:text-gray-600 italic">
+        <span v-else class="text-xs font-mono text-slate-500 italic">
           {{ t('projects.comingSoon') }}
+        </span>
+
+        <span class="text-[10px] font-mono text-slate-500 tracking-wider uppercase">
+          {{ t('projects.activeBadge') }}
         </span>
       </div>
     </div>

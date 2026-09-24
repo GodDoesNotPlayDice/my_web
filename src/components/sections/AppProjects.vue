@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import ProjectCard from './ProjectCard.vue'
-import type { Project } from './ProjectCard.vue'
-
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import ProjectCard, { type Project } from './ProjectCard.vue'
 
 const { t, tm } = useI18n()
 
@@ -15,66 +13,75 @@ interface ProjectData {
 const staticProjects = [
   {
     id: 1,
-    tags: ["Typescript" ,'Vue.js', "Nuxt", 'Python', 'FastAPI', 'Supabase', "Resend", "TailwindCSS"],
+    tags: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Python', 'FastAPI', 'Supabase', 'Resend', 'TailwindCSS'],
     url: 'https://www.mager.cl/',
-    accent: 'teal' as const,
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`,
+    accent: 'cyan' as const,
   },
   {
     id: 2,
-    tags: ["Typescript", 'Vue.js', "Nuxt", 'Supabase', "Resend", "TailwindCSS"],
+    tags: ['Nuxt 3', 'Vue 3', 'TypeScript', 'Supabase', 'Netlify CI/CD', 'Resend', 'TailwindCSS'],
     url: 'https://lanascurauma.cl/',
     accent: 'orange' as const,
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
   },
   {
     id: 3,
-    tags: ['Python', 'Playwright', 'DDD', 'MongoDB'],
+    tags: ['Python', 'Playwright', 'Clean Architecture', 'DDD', 'MongoDB', 'Batch Processing'],
     url: '#',
     accent: 'indigo' as const,
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
   },
   {
     id: 4,
-    tags: ["Typescript",'Vue.js', "Nuxt", 'Supabase', "Resend", "TailwindCSS", "GSAP", "PWA", "AI",],
+    tags: ['Vue 3', 'Nuxt', 'TypeScript', 'Supabase', 'PWA', 'GSAP Animations', 'AI Integration'],
     url: 'https://yozhlearning.netlify.app/',
-    accent: 'teal' as const,
-    icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>`,
+    accent: 'purple' as const,
   },
 ]
 
 const projects = computed(() => {
-  const translations = tm('projects.items') as ProjectData[]
+  const translations = (tm('projects.items') as ProjectData[]) || []
+  const highlights = (tm('projects.highlights') as string[]) || []
+
   return translations.map((item, index) => ({
     ...item,
-    ...staticProjects[index]
+    ...staticProjects[index],
+    architectureHighlight: highlights[index] || '',
   })) as Project[]
 })
 </script>
 
 <template>
-  <section id="projects" class="py-16 md:py-24 bg-white dark:bg-[#0b0f19] transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-5 md:px-8 projects-content">
+  <section id="projects" class="py-24 md:py-32 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 relative z-10 projects-content">
 
-      <!-- Header -->
-      <div class="mb-10 md:mb-16">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-colors">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">
+          {{ t('projects.kicker') }}
+        </div>
+
+        <h2
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"
+          style="font-family: 'Comfortaa', cursive;"
+        >
           {{ t('projects.title') }}
         </h2>
-        <div class="w-12 h-1 bg-[#20b2aa] mt-3 mb-4 md:mb-6"></div>
-        <p class="text-slate-600 dark:text-gray-400 max-w-2xl transition-colors text-sm md:text-base">
+
+        <div class="w-16 h-1 bg-gradient-to-r from-cyan-400 to-indigo-500 mx-auto mt-4 mb-4 rounded-full" />
+
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
           {{ t('projects.subtitle') }}
         </p>
       </div>
 
-      <!-- Projects gallery grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+      <!-- Projects Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         <ProjectCard
           v-for="project in projects"
           :key="project.id"
           :project="project"
         />
       </div>
+
     </div>
   </section>
 </template>
