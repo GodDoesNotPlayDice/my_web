@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t, tm } = useI18n()
@@ -94,8 +94,8 @@ function onHoverCell(day: ContributionDay, event: MouseEvent) {
   const target = event.currentTarget as HTMLElement
   if (target) {
     const rect = target.getBoundingClientRect()
-    tooltipX.value = rect.left + rect.width / 2
-    tooltipY.value = rect.top - 8
+    tooltipX.value = Math.round(rect.left + rect.width / 2)
+    tooltipY.value = Math.round(rect.top - 8)
   }
 }
 
@@ -172,8 +172,8 @@ function onHoverLeetCodeCell(day: ContributionDay, event: MouseEvent) {
   const target = event.currentTarget as HTMLElement
   if (target) {
     const rect = target.getBoundingClientRect()
-    tooltipLeetCodeX.value = rect.left + rect.width / 2
-    tooltipLeetCodeY.value = rect.top - 8
+    tooltipLeetCodeX.value = Math.round(rect.left + rect.width / 2)
+    tooltipLeetCodeY.value = Math.round(rect.top - 8)
   }
 }
 
@@ -232,9 +232,19 @@ const monthNames = computed(() => (tm('activity.github.months') as string[]) || 
   'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
 ])
 
+function handleScroll() {
+  if (hoveredDay.value) hoveredDay.value = null
+  if (hoveredLeetCodeDay.value) hoveredLeetCodeDay.value = null
+}
+
 onMounted(() => {
   fetchLiveGithubContributions()
   fetchLiveLeetCodeSubmissions()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
@@ -306,7 +316,10 @@ onMounted(() => {
           </div>
 
           <!-- Heatmap Container (Horizontal scroll on mobile with touch support) -->
-          <div class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-cyan-500/20">
+          <div
+            @scroll.passive="onLeaveCell"
+            class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-cyan-500/20"
+          >
             <div class="min-w-[700px] flex flex-col gap-2 pb-2">
 
               <!-- Month header markers -->
@@ -364,19 +377,23 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Tooltip Floating Badge -->
-          <div
-            v-if="hoveredDay"
-            class="fixed z-[9999] -translate-x-1/2 -translate-y-full px-2.5 py-1.5 rounded-lg bg-[#0a1224] border border-cyan-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_15px_rgba(0,217,255,0.3)] pointer-events-none text-xs font-mono text-white transition-opacity duration-150"
-            :style="{ left: `${tooltipX}px`, top: `${tooltipY}px` }"
-          >
-            <div class="text-cyan-400 font-bold">
-              {{ hoveredDay.count }} {{ hoveredDay.count === 1 ? 'commit' : 'commits' }}
+          <!-- Tooltip Floating Badge Teleported to Body to Escape Stacking Context -->
+          <Teleport to="body">
+            <div
+              v-if="hoveredDay"
+              class="fixed z-[99999] -translate-x-1/2 -translate-y-full px-2.5 py-1.5 rounded-lg bg-[#0a1224] border border-cyan-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.85),0_0_15px_rgba(0,217,255,0.3)] pointer-events-none text-xs font-mono text-white whitespace-nowrap transition-opacity duration-150"
+              :style="{ left: `${tooltipX}px`, top: `${tooltipY}px` }"
+            >
+              <div class="text-cyan-400 font-bold text-center">
+                {{ hoveredDay.count }} {{ hoveredDay.count === 1 ? 'commit' : 'commits' }}
+              </div>
+              <div class="text-[10px] text-slate-400 text-center">
+                {{ hoveredDay.date }}
+              </div>
+              <!-- Centered arrow pointing down toward square -->
+              <div class="absolute left-1/2 -bottom-[5px] -translate-x-1/2 w-2 h-2 bg-[#0a1224] border-r border-b border-cyan-500/40 rotate-45" />
             </div>
-            <div class="text-[10px] text-slate-400">
-              {{ hoveredDay.date }}
-            </div>
-          </div>
+          </Teleport>
         </div>
 
 
@@ -417,7 +434,10 @@ onMounted(() => {
           </div>
 
           <!-- Heatmap Container (Horizontal scroll on mobile with touch support) -->
-          <div class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-amber-500/20">
+          <div
+            @scroll.passive="onLeaveLeetCodeCell"
+            class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-amber-500/20"
+          >
             <div class="min-w-[700px] flex flex-col gap-2 pb-2">
 
               <!-- Month header markers -->
@@ -475,19 +495,23 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Tooltip Floating Badge for LeetCode -->
-          <div
-            v-if="hoveredLeetCodeDay"
-            class="fixed z-[9999] -translate-x-1/2 -translate-y-full px-2.5 py-1.5 rounded-lg bg-[#0a1224] border border-amber-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_15px_rgba(245,158,11,0.3)] pointer-events-none text-xs font-mono text-white transition-opacity duration-150"
-            :style="{ left: `${tooltipLeetCodeX}px`, top: `${tooltipLeetCodeY}px` }"
-          >
-            <div class="text-amber-400 font-bold">
-              {{ hoveredLeetCodeDay.count }} {{ hoveredLeetCodeDay.count === 1 ? t('activity.leetcode.submission') : t('activity.leetcode.submissions') }}
+          <!-- Tooltip Floating Badge for LeetCode Teleported to Body -->
+          <Teleport to="body">
+            <div
+              v-if="hoveredLeetCodeDay"
+              class="fixed z-[99999] -translate-x-1/2 -translate-y-full px-2.5 py-1.5 rounded-lg bg-[#0a1224] border border-amber-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.85),0_0_15px_rgba(245,158,11,0.3)] pointer-events-none text-xs font-mono text-white whitespace-nowrap transition-opacity duration-150"
+              :style="{ left: `${tooltipLeetCodeX}px`, top: `${tooltipLeetCodeY}px` }"
+            >
+              <div class="text-amber-400 font-bold text-center">
+                {{ hoveredLeetCodeDay.count }} {{ hoveredLeetCodeDay.count === 1 ? t('activity.leetcode.submission') : t('activity.leetcode.submissions') }}
+              </div>
+              <div class="text-[10px] text-slate-400 text-center">
+                {{ hoveredLeetCodeDay.date }}
+              </div>
+              <!-- Centered arrow pointing down toward square -->
+              <div class="absolute left-1/2 -bottom-[5px] -translate-x-1/2 w-2 h-2 bg-[#0a1224] border-r border-b border-amber-500/40 rotate-45" />
             </div>
-            <div class="text-[10px] text-slate-400">
-              {{ hoveredLeetCodeDay.date }}
-            </div>
-          </div>
+          </Teleport>
         </div>
 
       </div>
