@@ -16,6 +16,19 @@
   --text-secondary: #94a3b8;
   --cyan: #00d9ff;
   --purple: #a78bfa;
+
+  /* Notivue container positioning & z-index (safe from mobile navbar) */
+  --nv-z: 2000;
+  --nv-root-top: 5.5rem;
+  --nv-root-bottom: 1.5rem;
+  --nv-root-right: 1.5rem;
+  --nv-root-left: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --nv-root-top: 1.5rem;
+  }
 }
 
 html {
@@ -74,4 +87,39 @@ html.lang-morphing main {
   filter: blur(1.5px);
   will-change: opacity, filter;
   transition: opacity 0.12s ease-out, filter 0.12s ease-out;
+}
+
+/* Notivue Cosmic Glassmorphic Styling */
+.Notivue__notification {
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.01em;
+}
+
+[data-notivue='success'],
+[data-notivue='promise-resolve'] {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 217, 255, 0.15), inset 0 1px 0 rgba(0, 217, 255, 0.25) !important;
+}
+
+[data-notivue='error'],
+[data-notivue='promise-reject'] {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(244, 63, 94, 0.18), inset 0 1px 0 rgba(244, 63, 94, 0.25) !important;
+}
+
+[data-notivue='info'] {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(167, 139, 250, 0.18), inset 0 1px 0 rgba(167, 139, 250, 0.25) !important;
+}
+
+[data-notivue='warning'] {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(245, 158, 11, 0.25) !important;
+}
+
+.Notivue__close {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.Notivue__close:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
 }
