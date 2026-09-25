@@ -11,19 +11,34 @@ const { t } = useI18n()
 const schema = computed(() =>
   toTypedSchema(
     v.object({
-      name: v.pipe(v.string(), v.nonEmpty(t('contact.form.errors.nameRequired'))),
+      name: v.pipe(
+        v.optional(v.string(t('contact.form.errors.nameRequired')), ''),
+        v.trim(),
+        v.nonEmpty(t('contact.form.errors.nameRequired'))
+      ),
       email: v.pipe(
-        v.string(),
+        v.optional(v.string(t('contact.form.errors.emailRequired')), ''),
+        v.trim(),
         v.nonEmpty(t('contact.form.errors.emailRequired')),
         v.email(t('contact.form.errors.emailInvalid'))
       ),
-      message: v.pipe(v.string(), v.nonEmpty(t('contact.form.errors.messageRequired'))),
-    })
+      message: v.pipe(
+        v.optional(v.string(t('contact.form.errors.messageRequired')), ''),
+        v.trim(),
+        v.nonEmpty(t('contact.form.errors.messageRequired'))
+      ),
+    }),
+    { abortPipeEarly: true }
   )
 )
 
 const { defineField, handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
+  initialValues: {
+    name: '',
+    email: '',
+    message: '',
+  },
 })
 
 const [formName] = defineField('name')
@@ -67,7 +82,13 @@ const submitForm = handleSubmit(async (values) => {
     }
 
     push.success(t('contact.form.success'))
-    resetForm()
+    resetForm({
+      values: {
+        name: '',
+        email: '',
+        message: '',
+      },
+    })
 
     formName.value = ''
     formEmail.value = ''
