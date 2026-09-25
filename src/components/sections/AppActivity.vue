@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t, tm } = useI18n()
@@ -49,6 +49,11 @@ async function fetchLiveGithubContributions() {
       const data = await res.json()
       if (data && data.contributions && data.contributions.length > 0) {
         rawContributions.value = data.contributions
+        nextTick(() => {
+          if (!userScrolledGithub) {
+            scrollToRight(githubScrollRef.value)
+          }
+        })
       }
     }
   } catch {
@@ -142,30 +147,120 @@ async function fetchLiveLeetCodeSubmissions() {
         realDays.push({ date: dateStr, count, level })
       }
       rawLeetCodeSubmissions.value = realDays
+      nextTick(() => {
+        if (!userScrolledLeetCode) {
+          scrollToRight(leetcodeScrollRef.value)
+        }
+      })
     }
   } catch {
     // Retain clean empty grid
   }
 }
 
-// Month labels
-const monthNames = computed(() => (tm('activity.github.months') as string[]) || [
-  'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
-])
+// Scroll container references & mobile auto-scroll state
+const githubScrollRef = ref<HTMLElement | null>(null)
+const leetcodeScrollRef = ref<HTMLElement | null>(null)
+
+let userScrolledGithub = false
+let userScrolledLeetCode = false
+
+function onGithubScroll() {
+  onLeaveCell()
+  userScrolledGithub = true
+}
+
+function onLeetCodeScroll() {
+  onLeaveLeetCodeCell()
+  userScrolledLeetCode = true
+}
+
+function scrollToRight(el: HTMLElement | null) {
+  if (el && el.scrollWidth > el.clientWidth) {
+    el.scrollLeft = el.scrollWidth - el.clientWidth
+  }
+}
+
+function scrollHeatmapsToEnd(force = false) {
+  nextTick(() => {
+    if (force || !userScrolledGithub) {
+      scrollToRight(githubScrollRef.value)
+    }
+    if (force || !userScrolledLeetCode) {
+      scrollToRight(leetcodeScrollRef.value)
+    }
+  })
+}
+
+// Rolling month labels: align the 12 month markers with the actual rolling timeline ending in current month
+function getRollingMonths(allMonths: string[], firstDateStr?: string) {
+  if (!firstDateStr) return allMonths
+  const parts = firstDateStr.split('-').map(Number)
+  if (parts.length < 3 || isNaN(parts[0])) return allMonths
+  const firstDate = new Date(parts[0], parts[1] - 1, parts[2])
+  const startMonth = firstDate.getDate() > 20 ? (firstDate.getMonth() + 1) % 12 : firstDate.getMonth()
+  const result: string[] = []
+  for (let i = 0; i < 12; i++) {
+    result.push(allMonths[(startMonth + i) % 12])
+  }
+  return result
+}
+
+const githubMonths = computed(() => {
+  const allMonths = (tm('activity.github.months') as string[]) || [
+    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  ]
+  return getRollingMonths(allMonths, rawContributions.value[0]?.date)
+})
+
+const leetcodeMonths = computed(() => {
+  const allMonths = (tm('activity.leetcode.months') as string[]) || (tm('activity.github.months') as string[]) || [
+    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  ]
+  return getRollingMonths(allMonths, rawLeetCodeSubmissions.value[0]?.date)
+})
+
+let activityObserver: IntersectionObserver | null = null
 
 function handleScroll() {
   if (hoveredDay.value) hoveredDay.value = null
   if (hoveredLeetCodeDay.value) hoveredLeetCodeDay.value = null
 }
 
+function handleResize() {
+  if (!userScrolledGithub || !userScrolledLeetCode) {
+    scrollHeatmapsToEnd()
+  }
+}
+
 onMounted(() => {
   fetchLiveGithubContributions()
   fetchLiveLeetCodeSubmissions()
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('resize', handleResize)
+
+  scrollHeatmapsToEnd(true)
+  setTimeout(() => scrollHeatmapsToEnd(true), 50)
+  setTimeout(() => scrollHeatmapsToEnd(true), 250)
+  setTimeout(() => scrollHeatmapsToEnd(true), 600)
+
+  const sectionEl = document.getElementById('activity')
+  if (sectionEl && typeof IntersectionObserver !== 'undefined') {
+    activityObserver = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        if (!userScrolledGithub || !userScrolledLeetCode) {
+          scrollHeatmapsToEnd()
+        }
+      }
+    }, { threshold: 0.05 })
+    activityObserver.observe(sectionEl)
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', handleResize)
+  activityObserver?.disconnect()
 })
 </script>
 
@@ -238,14 +333,15 @@ onUnmounted(() => {
 
           <!-- Heatmap Container (Horizontal scroll on mobile with touch support) -->
           <div
-            @scroll.passive="onLeaveCell"
+            ref="githubScrollRef"
+            @scroll.passive="onGithubScroll"
             class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-cyan-500/20"
           >
             <div class="min-w-[700px] flex flex-col gap-2 pb-2">
 
               <!-- Month header markers -->
               <div class="flex pl-8 text-[10px] font-mono text-slate-500 tracking-wider">
-                <span v-for="(m, i) in monthNames" :key="i" class="flex-1">
+                <span v-for="(m, i) in githubMonths" :key="i" class="flex-1">
                   {{ m }}
                 </span>
               </div>
@@ -356,14 +452,15 @@ onUnmounted(() => {
 
           <!-- Heatmap Container (Horizontal scroll on mobile with touch support) -->
           <div
-            @scroll.passive="onLeaveLeetCodeCell"
+            ref="leetcodeScrollRef"
+            @scroll.passive="onLeetCodeScroll"
             class="pt-6 overflow-x-auto select-none scrollbar-thin scrollbar-thumb-amber-500/20"
           >
             <div class="min-w-[700px] flex flex-col gap-2 pb-2">
 
               <!-- Month header markers -->
               <div class="flex pl-8 text-[10px] font-mono text-slate-500 tracking-wider">
-                <span v-for="(m, i) in monthNames" :key="i" class="flex-1">
+                <span v-for="(m, i) in leetcodeMonths" :key="i" class="flex-1">
                   {{ m }}
                 </span>
               </div>
