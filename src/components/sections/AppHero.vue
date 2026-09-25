@@ -344,7 +344,7 @@ onBeforeUnmount(() => {
               <picture class="absolute inset-0 w-full h-full">
                 <source srcset="/me2.webp" type="image/webp" />
                 <img
-                  src="/me2.jpg"
+                  src="/me2.webp"
                   alt="Vicente Vasquez"
                   width="370"
                   height="510"
@@ -464,10 +464,13 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <!-- Hint -->
-        <span class="text-[10px] font-mono text-slate-500 tracking-widest mt-4 uppercase">
-          {{ t('hero.card.hoverHint') }}
-        </span>
+        <!-- Hint Badge -->
+        <div class="mt-4 inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#080d1e]/85 border border-cyan-500/35 text-cyan-300 shadow-[0_0_20px_rgba(0,217,255,0.12),0_4px_16px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-300 hover:border-cyan-400 hover:text-cyan-200 hover:shadow-[0_0_25px_rgba(0,217,255,0.25)] select-none">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00d9ff] animate-pulse shrink-0" />
+          <span class="text-xs sm:text-[13px] font-mono font-medium tracking-wider text-center uppercase">
+            {{ t('hero.card.hoverHint') }}
+          </span>
+        </div>
       </div>
 
     </div>
