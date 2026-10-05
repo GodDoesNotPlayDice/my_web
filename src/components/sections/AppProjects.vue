@@ -8,31 +8,32 @@ const { t, tm } = useI18n()
 interface ProjectData {
   title: string
   description: string
+  tags?: string[]
 }
 
 const staticProjects = [
   {
     id: 1,
-    tags: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Python', 'FastAPI', 'Supabase', 'Resend', 'TailwindCSS'],
+    tags: ['Nuxt 3', 'TypeScript', 'TailwindCSS 4', 'Supabase', 'PostgreSQL', 'Chart.js', 'Vee-Validate & Zod', 'API UF'],
     url: 'https://www.mager.cl/',
     accent: 'cyan' as const,
   },
   {
     id: 2,
-    tags: ['Nuxt 3', 'Vue 3', 'TypeScript', 'Supabase', 'Netlify CI/CD', 'Resend', 'TailwindCSS'],
-    url: 'https://lanascurauma.cl/',
-    accent: 'orange' as const,
-  },
-  {
-    id: 3,
-    tags: ['Python', 'Playwright', 'Clean Architecture', 'DDD', 'MongoDB', 'Batch Processing'],
+    tags: ['Python', 'Web Scraping', 'Alta Concurrencia', 'Arquitectura Hexagonal', 'MongoDB', 'Retail Analytics'],
     url: '#',
     accent: 'indigo' as const,
   },
   {
+    id: 3,
+    tags: ['Nuxt 3', 'Supabase', 'Python Scraper', 'GitHub Actions', 'Flow.cl', 'Resend', 'Marca Blanca'],
+    url: 'https://lanascurauma.cl/',
+    accent: 'orange' as const,
+  },
+  {
     id: 4,
-    tags: ['Vue 3', 'Nuxt', 'TypeScript', 'Supabase', 'PWA', 'GSAP Animations', 'AI Integration'],
-    url: 'https://yozhlearning.netlify.app/',
+    tags: ['Vue 3', 'Nuxt 4', 'TypeScript', 'Nx Monorepo', 'DDD', 'Supabase', 'TailwindCSS 4', 'Vitest & Playwright'],
+    url: 'https://yozhlearning.app/',
     accent: 'purple' as const,
   },
 ]
@@ -44,6 +45,7 @@ const projects = computed(() => {
   return translations.map((item, index) => ({
     ...item,
     ...staticProjects[index],
+    tags: (item.tags && item.tags.length > 0) ? item.tags : staticProjects[index].tags,
     architectureHighlight: highlights[index] || '',
   })) as Project[]
 })

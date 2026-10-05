@@ -27,19 +27,19 @@ const staticItems: ExperienceItemStatic[] = [
     accent: 'purple',
   },
   {
-    tags: ['Vue.js 3', 'Nuxt 3', 'Python', 'FastAPI', 'Supabase', 'Resend'],
+    tags: ['Nuxt 3', 'TypeScript', 'TailwindCSS 4', 'Supabase', 'PostgreSQL', 'Chart.js', 'Vee-Validate / Zod'],
     accent: 'cyan',
   },
   {
-    tags: ['Nuxt 3', 'TypeScript', 'Netlify CI/CD', 'Resend', 'Supabase'],
-    accent: 'amber',
-  },
-  {
-    tags: ['Python', 'Playwright', 'Clean Architecture', 'DDD', 'MongoDB'],
+    tags: ['Python', 'Web Scraping', 'Arquitectura Hexagonal', 'MongoDB', 'Alta Concurrencia'],
     accent: 'emerald',
   },
   {
-    tags: ['Vue 3', 'Nuxt', 'Supabase', 'PWA', 'GSAP', 'AI Engine'],
+    tags: ['Nuxt 3', 'Supabase', 'Python Scraper', 'GitHub Actions', 'Flow.cl', 'Resend'],
+    accent: 'amber',
+  },
+  {
+    tags: ['Vue 3', 'Nuxt 4', 'TypeScript', 'Nx Monorepo', 'DDD', 'Supabase', 'Vitest / Playwright'],
     accent: 'purple',
     inProgress: true,
   },
