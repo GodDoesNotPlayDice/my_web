@@ -106,7 +106,7 @@ export const es = {
     stats: {
       education: { label: "Educación", value: "Ingeniería Informática" },
       experience: { label: "Experiencia", value: "Desarrollo Full-Stack" },
-      projects: { label: "Proyectos", value: "Lanas Curauma & más" },
+      projects: { label: "Proyectos", value: "Mager, Yozh & más" },
       stack: { label: "Stack Principal", value: "Python, Vue, Supabase" },
     },
     pillars: [
@@ -186,18 +186,18 @@ export const es = {
     typeBadges: [
       "ORIGEN AUTODIDACTA",
       "EXCELENCIA ACADÉMICA",
-      "CRM EN PRODUCCIÓN",
+      "GESTIÓN DE SEGUROS EN PROD",
+      "SCRAPER DE ALTA CONCURRENCIA",
       "E-COMMERCE DROPSHIPPING",
-      "SCRAPER DE ALTA ESCALA",
-      "PWA GAMIFICADA ACTIVA",
+      "PWA OFFLINE-FIRST (NX & DDD)",
     ],
     tagLists: [
       ["HTML5", "CSS3", "JavaScript", "Python"],
       ["Ingeniería Informática", "Duoc UC", "Ciencia de Datos", "2 Distinciones"],
-      ["Vue.js 3", "Nuxt 3", "Python", "FastAPI", "Supabase", "Resend"],
-      ["Nuxt 3", "TypeScript", "Netlify CI/CD", "Resend", "Supabase"],
-      ["Python", "Playwright", "Arquitectura Limpia", "DDD", "MongoDB"],
-      ["Vue 3", "Nuxt", "Supabase", "PWA", "GSAP", "Motor IA"],
+      ["Nuxt 3", "TypeScript", "TailwindCSS 4", "Supabase", "PostgreSQL", "Chart.js", "Zod"],
+      ["Python", "Web Scraping", "Arquitectura Hexagonal", "MongoDB", "Concurrencia"],
+      ["Nuxt 3", "Supabase", "Python", "GitHub Actions", "Flow.cl", "Resend"],
+      ["Vue 3", "Nuxt 4", "TypeScript", "Nx Monorepo", "DDD", "Supabase", "Vitest & Playwright"],
     ],
     items: [
       {
@@ -216,31 +216,31 @@ export const es = {
       },
       {
         period: "2023 – 2026",
-        title: "Mager.cl — Landing & CRM",
+        title: "Mager.cl — Gestión de Clientes y Pólizas de Seguros",
         company: "Corredora Mager",
         description:
-          "Desarrollo de una landing page profesional y una plataforma CRM a medida para la corredora de propiedades Mager.cl. Solución integral que incluye gestión de clientes, propiedades y flujos de contacto.",
-      },
-      {
-        period: "2025 – 2026",
-        title: "Lanascurauma.cl — E-commerce",
-        company: "Lanas Curauma",
-        description:
-          "Despliegue de un e-commerce completo bajo el modelo de dropshipping. Optimizado con Netlify para CI/CD y Resend para notificaciones transaccionales automáticas.",
+          "Desarrollo de plataforma web de seguros con Nuxt 3, TypeScript, TailwindCSS 4 y Supabase. Gestión de clientes y 16 tipos de pólizas con validación dinámica (Zod), cálculo en UF en tiempo real, dashboard en Chart.js, alertas por cron jobs y funciones RPC para transacciones ACID complejas.",
       },
       {
         period: "2025",
-        title: "Gearlabs — Scraper de Retail",
+        title: "Gearlabs — Web Scraping Retail",
         company: "Gearlabs",
         description:
-          "Creación de un scraper de retail robusto y escalable garantizando calidad de código mediante Arquitectura Limpia y Diseño Orientado a Dominios (DDD). Solución capaz de procesar grandes volúmenes de datos de productos.",
+          "Diseño de sistemas de web scraping paralelo y de alta concurrencia en Python para retail. Implementación con Arquitectura Hexagonal y persistencia masiva en MongoDB para optimizar flujos de recolección y análisis de mercado.",
+      },
+      {
+        period: "2025 – 2026",
+        title: "Lanascurauma.cl — E-commerce & Dropshipping",
+        company: "Lanas Curauma",
+        description:
+          "E-commerce en Nuxt 3 y Supabase con catálogo automatizado vía scraper en Python y GitHub Actions (Revesderecho). Integración de pasarela Flow.cl, correos con Resend y arquitectura modular de marca blanca preparada para dropshipping directo.",
       },
       {
         period: "2026",
-        title: "Yozh — App de Aprendizaje de Idiomas",
-        company: "",
+        title: "Yozh Learning — PWA Offline-First",
+        company: "yozhlearning.app",
         description:
-          "Desarrollo de una aplicación web y móvil innovadora diseñada para facilitar el aprendizaje de idiomas de forma interactiva. Un proyecto personal que combina mis habilidades técnicas con mi pasión por la educación y la tecnología.",
+          "PWA offline-first para aprendizaje contextual de idiomas. Arquitectura de monorepositorio con Nx y Domain-Driven Design (DDD), stack reactivo en Vue 3, Nuxt 4, TypeScript, Supabase, Tailwind CSS v4, almacenamiento local y cobertura de pruebas con Vitest y Playwright.",
       },
     ],
   },
@@ -254,31 +254,69 @@ export const es = {
     noImage: "Imagen próximamente",
     activeBadge: "PROD // ACTIVO",
     highlights: [
-      "CRM y portal inmobiliario full-stack con pipeline automatizado de correos",
-      "E-Commerce serverless con notificaciones transaccionales y despliegue continuo",
-      "Motor de scraping de retail a gran escala con separación por Diseño Orientado al Dominio",
-      "Motor interactivo de aprendizaje de idiomas con gamificación, vocabulario contextual e IA",
+      "Plataforma integral de gestión de seguros con 16 tipos de pólizas, validación Zod, API de UF y funciones RPC multitabla",
+      "Sistemas de extracción masiva y paralela en Python con Arquitectura Hexagonal y persistencia optimizada en MongoDB",
+      "E-commerce con scraping automatizado en GitHub Actions, pasarela Flow.cl, Resend y arquitectura de marca blanca escalable",
+      "PWA offline-first con monorepositorio Nx, Domain-Driven Design (DDD), Nuxt 4, Vue 3, Supabase y testing con Vitest y Playwright",
     ],
     items: [
       {
-        title: "Mager.cl — CRM & Landing Page",
+        title: "Mager.cl — Gestión Integral de Seguros",
         description:
-          "Plataforma CRM a medida y landing page profesional para la corredora de propiedades Mager.cl. Incluye gestión de clientes, propiedades y flujos de contacto automatizados.",
+          "Aplicación web de gestión de seguros para la corredora Mager con Nuxt 3, TypeScript, TailwindCSS 4 y Supabase. Administra clientes (RUT chileno), 16 tipos de pólizas con formularios dinámicos validados con Vee-Validate y Zod, gestión documental en PDF, cálculo de primas vía API de UF en tiempo real, cron jobs de notificación, dashboard analítico en Chart.js y funciones RPC para transacciones complejas en PostgreSQL.",
+        tags: [
+          "Nuxt 3",
+          "TypeScript",
+          "TailwindCSS 4",
+          "Supabase",
+          "PostgreSQL",
+          "Chart.js",
+          "Vee-Validate & Zod",
+          "API UF",
+          "RPC",
+        ],
       },
       {
-        title: "Lanascurauma.cl — E-commerce",
+        title: "Gearlabs — Web Scraping Retail & Extracción Concurrente",
         description:
-          "E-commerce completo bajo el modelo de dropshipping con despliegue continuo en Netlify y notificaciones transaccionales automáticas con Resend.",
+          "Sistemas de extracción de datos paralelos y de alta concurrencia en Python para el sector retail. Diseñado bajo Arquitectura Hexagonal para desacoplar fuentes de datos y lógica de dominio, gestionando la estructuración y persistencia de grandes volúmenes de información en MongoDB para análisis de mercado.",
+        tags: [
+          "Python",
+          "Web Scraping",
+          "Alta Concurrencia",
+          "Arquitectura Hexagonal",
+          "MongoDB",
+          "Retail Analytics",
+        ],
       },
       {
-        title: "Gearlabs — Retail Scraper",
+        title: "Lanascurauma.cl — E-commerce & Dropshipping Automatizado",
         description:
-          "Scraper de retail escalable construido con Arquitectura Limpia y DDD, capaz de procesar grandes volúmenes de datos de productos de forma robusta y mantenible.",
+          "E-commerce desarrollado con Nuxt 3 y Supabase con modelo tipo dropshipping automatizado. Sincroniza catálogo e imágenes desde el distribuidor (Revesderecho) mediante un scraper en Python con GitHub Actions, integra pagos con Flow.cl, emails con Resend y una arquitectura de marca blanca modular extensible a dropshipping puro por webhooks.",
+        tags: [
+          "Nuxt 3",
+          "Supabase",
+          "Python Scraper",
+          "GitHub Actions",
+          "Flow.cl",
+          "Resend",
+          "Marca Blanca",
+        ],
       },
       {
-        title: "Yozh — Language Learning App",
+        title: "Yozh Learning — PWA Offline-First de Idiomas",
         description:
-          "Aplicación web y móvil en desarrollo para el aprendizaje de idiomas de forma interactiva. Combina gamificación, práctica de escritura, escucha y vocabulario contextual.",
+          "Aplicación web progresiva (PWA) offline-first para aprendizaje contextual de idiomas. Construida sobre un monorepositorio con Nx y Domain-Driven Design (DDD) para desacoplar la lógica de negocio, con un stack moderno en Vue 3, Nuxt 4, TypeScript, Supabase, Tailwind CSS v4, persistencia local avanzada y testing con Vitest y Playwright.",
+        tags: [
+          "Vue 3",
+          "Nuxt 4",
+          "TypeScript",
+          "Nx Monorepo",
+          "DDD",
+          "Supabase",
+          "TailwindCSS 4",
+          "Vitest & Playwright",
+        ],
       },
     ],
   },
